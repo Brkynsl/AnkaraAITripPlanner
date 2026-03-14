@@ -6,7 +6,7 @@ Ankara AI Trip Planner, kullanıcılara bütçelerine ve tercihlerine göre opti
 
 | Giriş Ekranı | Ana Sayfa | Seyahat Planla | Bütçe ve Rota Dağılımı | Günlük Gezi Planı |
 | :---: | :---: | :---: | :---: | :---: |
-| <img src="Screenshots/a.png" width="200"> | <img src="Screenshots/anasayfa.png" width="200"> | <img src="Screenshots/planla.png" width="200"> | <img src="Screenshots/pro1.png" width="200"> | <img src="Screenshots/pro2.png" width="200"> |
+| <img src="Screenshots/a.png" width="200" height="400"> | <img src="Screenshots/anasayfa.png" width="200"> | <img src="Screenshots/planla.png" width="200"> | <img src="Screenshots/pro1.png" width="200"> | <img src="Screenshots/pro2.png" width="200"> |
 ## 🛠 Kullanılan Teknolojiler
 
 - **Dil:** Swift 5.9+
