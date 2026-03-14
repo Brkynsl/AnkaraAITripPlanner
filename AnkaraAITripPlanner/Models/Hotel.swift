@@ -62,4 +62,38 @@ struct Hotel: Codable {
         if let notes = notes { dict["notes"] = notes }
         return dict
     }
+    
+    static func fromDictionary(_ dict: [String: Any]) -> Hotel? {
+        guard let name = dict["name"] as? String,
+              let starRating = dict["starRating"] as? Int,
+              let latitude = dict["latitude"] as? Double,
+              let longitude = dict["longitude"] as? Double,
+              let address = dict["address"] as? String,
+              let distanceToCenter = dict["distanceToCenter"] as? String,
+              let amenities = dict["amenities"] as? [String],
+              let rating = dict["rating"] as? Double,
+              let reviewCount = dict["reviewCount"] as? Int,
+              let checkIn = dict["checkIn"] as? String,
+              let checkOut = dict["checkOut"] as? String else {
+            return nil
+        }
+        
+        return Hotel(
+            name: name,
+            starRating: starRating,
+            pricePerNight: dict["pricePerNight"] as? Double ?? 0,
+            totalPrice: dict["totalPrice"] as? Double ?? 0,
+            latitude: latitude,
+            longitude: longitude,
+            address: address,
+            distanceToCenter: distanceToCenter,
+            amenities: amenities,
+            imageURL: dict["imageURL"] as? String,
+            rating: rating,
+            reviewCount: reviewCount,
+            checkIn: checkIn,
+            checkOut: checkOut,
+            notes: dict["notes"] as? String
+        )
+    }
 }

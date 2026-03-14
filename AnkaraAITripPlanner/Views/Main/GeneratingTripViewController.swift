@@ -132,24 +132,30 @@ final class GeneratingTripViewController: UIViewController {
     }
     
     private func goToAlternatives(plans: [TripPlan]) {
-        let alternativesVC = TripAlternativesViewController()
-        alternativesVC.plans = plans
-        alternativesVC.city = city
-        alternativesVC.days = days
-        alternativesVC.budget = budget
+        // Önce üzerimizdeki bekleyen animasyonları veya olası sunumları temizle
+        // En sağlıklı yöntem: Önce loading ekranını kapatıp, sonra ana sunucudan (presentingViewController) yenisini açmaktır.
         
-        let navVC = UINavigationController(rootViewController: alternativesVC)
-        navVC.modalPresentationStyle = .fullScreen
+        let presenter = self.presentingViewController
         
-        // Önce kendimizi kapatıp sonra yeni ekranı açmak daha stabil olabilir
-        // Veya doğrudan üzerimize present ediyoruz
-        if self.presentingViewController != nil {
-            self.present(navVC, animated: true)
-        } else {
-            // Eğer bir şekilde hiyerarşi bozulduysa window üzerinden aç
-            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-               let window = windowScene.windows.filter(\.isKeyWindow).first {
-                window.rootViewController?.present(navVC, animated: true)
+        self.dismiss(animated: true) {
+            let alternativesVC = TripAlternativesViewController()
+            alternativesVC.plans = plans
+            alternativesVC.city = self.city
+            alternativesVC.days = self.days
+            alternativesVC.budget = self.budget
+            
+            let navVC = UINavigationController(rootViewController: alternativesVC)
+            navVC.modalPresentationStyle = .fullScreen
+            
+            // Eğer presenter hala hayattaysa onun üzerinden aç
+            if let presenter = presenter {
+                presenter.present(navVC, animated: true)
+            } else {
+                // Fallback: Window root üzerinden aç
+                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                   let window = windowScene.windows.filter(\.isKeyWindow).first {
+                    window.rootViewController?.present(navVC, animated: true)
+                }
             }
         }
     }

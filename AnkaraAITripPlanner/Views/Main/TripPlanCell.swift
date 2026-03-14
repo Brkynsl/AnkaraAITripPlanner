@@ -203,10 +203,10 @@ final class TripPlanCell: UITableViewCell {
         typeIconView.image = UIImage(systemName: plan.planType.iconName)
         scoreLabel.text = "%\(plan.fitScore) Eşleşme"
         
-        transportLabel.text = " \(String(describing: plan.transportation))"
-        let transportAttr = NSMutableAttributedString(string: transportLabel.text ?? "")
+        let transportText = " \(plan.transportation.type.displayName) (\(plan.transportation.provider))"
+        let transportAttr = NSMutableAttributedString(string: transportText)
         let tIcon = NSTextAttachment()
-        tIcon.image = UIImage(systemName: "tram.fill")?.withTintColor(AppColors.textSecondary)
+        tIcon.image = UIImage(systemName: plan.transportation.type.iconName)?.withTintColor(AppColors.textSecondary)
         tIcon.bounds = CGRect(x: 0, y: -2, width: 14, height: 14)
         let tFinal = NSMutableAttributedString(attachment: tIcon)
         tFinal.append(transportAttr)

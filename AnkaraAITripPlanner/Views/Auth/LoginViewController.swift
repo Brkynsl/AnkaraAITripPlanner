@@ -431,26 +431,11 @@ final class LoginViewController: UIViewController {
     private func handleSuccessfulLogin(user: AppUser) {
         let hasSeenOnboarding = UserDefaults.standard.bool(forKey: UserDefaultsKeys.hasCompletedOnboarding)
         if user.hasCompletedOnboarding || hasSeenOnboarding {
-            navigateToMain()
+            UserDefaults.standard.set(true, forKey: UserDefaultsKeys.hasCompletedOnboarding)
+            SceneDelegate.shared?.showMainScreen()
         } else {
-            navigateToOnboarding()
+            SceneDelegate.shared?.showOnboarding()
         }
-    }
-    
-    // MARK: - Ekran Geçiş Metotları
-    
-    private func navigateToOnboarding() {
-        let onboardingVC = OnboardingContainerViewController()
-        onboardingVC.modalPresentationStyle = .fullScreen
-        onboardingVC.modalTransitionStyle = .crossDissolve
-        present(onboardingVC, animated: true)
-    }
-    
-    private func navigateToMain() {
-        let mainVC = MainTabBarController()
-        mainVC.modalPresentationStyle = .fullScreen
-        mainVC.modalTransitionStyle = .crossDissolve
-        present(mainVC, animated: true)
     }
     
     // MARK: - IBAction / Buton Aksiyonları

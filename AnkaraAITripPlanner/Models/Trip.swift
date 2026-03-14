@@ -5,6 +5,7 @@
 //           koleksiyonunda saklanır. Bu model Tatilim sayfasının temel veri kaynağıdır.
 
 import Foundation
+import FirebaseFirestore
 
 // MARK: - Seyahat Durumu
 // Bir seyahatin mevcut durumunu belirtir.
@@ -74,5 +75,50 @@ struct Trip: Codable {
             dict["updatedAt"] = updatedAt
         }
         return dict
+    }
+    
+    static func fromDictionary(_ dict: [String: Any], id: String) -> Trip? {
+        guard let userId = dict["userId"] as? String,
+              let city = dict["city"] as? String,
+              let days = dict["days"] as? Int,
+              let totalBudget = dict["totalBudget"] as? Double,
+              let statusRaw = dict["status"] as? String,
+              let status = TripStatus(rawValue: statusRaw),
+              let plansData = dict["plans"] as? [[String: Any]],
+              let selectedPlanIndex = dict["selectedPlanIndex"] as? Int else {
+            return nil
+        }
+        
+        let plans = plansData.compactMap { TripPlan.fromDictionary($0) }
+        
+        // Firestore Timestamp or Date check
+        let createdAt: Date
+        if let ts = dict["createdAt"] as? Timestamp {
+            createdAt = ts.dateValue()
+        } else if let date = dict["createdAt"] as? Date {
+            createdAt = date
+        } else {
+            createdAt = Date()
+        }
+        
+        let updatedAt: Date?
+        if let ts = dict["updatedAt"] as? Timestamp {
+            updatedAt = ts.dateValue()
+        } else {
+            updatedAt = dict["updatedAt"] as? Date
+        }
+        
+        return Trip(
+            id: id,
+            userId: userId,
+            city: city,
+            days: days,
+            totalBudget: totalBudget,
+            plans: plans,
+            selectedPlanIndex: selectedPlanIndex,
+            status: status,
+            createdAt: createdAt,
+            updatedAt: updatedAt
+        )
     }
 }

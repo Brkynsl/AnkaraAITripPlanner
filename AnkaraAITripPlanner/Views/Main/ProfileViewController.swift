@@ -119,6 +119,9 @@ final class ProfileViewController: UIViewController {
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
     
+    // Dark mode switch referansı
+    private var darkModeSwitch: UISwitch?
+    
     // MARK: - UI Kurulumu
     private func setupUI() {
         view.backgroundColor = AppColors.background
@@ -137,11 +140,19 @@ final class ProfileViewController: UIViewController {
             ("wallet.pass.fill", "Bütçe Davranışı", AppColors.success)
         ])
         
-        let settingsSection = createMenuSection(title: "Ayarlar", items: [
-            ("moon.fill", "Karanlık Mod", AppColors.primary),
-            ("globe", "Dil", AppColors.textSecondary),
-            ("bell.fill", "Bildirimler", UIColor(hex: "#FF9500")),
-            ("shield.fill", "Gizlilik", UIColor(hex: "#34C759"))
+        // Dark mode satırını ayrı oluştur (UISwitch için)
+        let darkModeRow = createDarkModeRow()
+        let settingsSection = createMenuSectionWithCustomRows(title: "Ayarlar", customRows: [
+            darkModeRow,
+            createMenuRow(icon: "globe", title: "Dil", color: AppColors.textSecondary) { [weak self] in
+                self?.handleMenuTap(title: "Dil")
+            },
+            createMenuRow(icon: "bell.fill", title: "Bildirimler", color: UIColor(hex: "#FF9500")) { [weak self] in
+                self?.handleMenuTap(title: "Bildirimler")
+            },
+            createMenuRow(icon: "shield.fill", title: "Gizlilik", color: UIColor(hex: "#34C759")) { [weak self] in
+                self?.handleMenuTap(title: "Gizlilik")
+            }
         ])
         
         let infoSection = createMenuSection(title: "Hakkında", items: [
@@ -334,6 +345,121 @@ final class ProfileViewController: UIViewController {
         }
     }
     
+    // MARK: - Dark Mode Satırı (UISwitch ile)
+    private func createDarkModeRow() -> UIView {
+        let row = UIView()
+        row.translatesAutoresizingMaskIntoConstraints = false
+        row.heightAnchor.constraint(equalToConstant: 48).isActive = true
+        
+        let iconBg = UIView()
+        iconBg.translatesAutoresizingMaskIntoConstraints = false
+        iconBg.backgroundColor = AppColors.primary.withAlphaComponent(0.12)
+        iconBg.layer.cornerRadius = 8
+        
+        let iconView = UIImageView()
+        iconView.translatesAutoresizingMaskIntoConstraints = false
+        iconView.image = UIImage(systemName: "moon.fill")
+        iconView.tintColor = AppColors.primary
+        iconView.contentMode = .scaleAspectFit
+        
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Karanlık Mod"
+        label.font = AppFonts.regular(16)
+        label.textColor = AppColors.textPrimary
+        
+        let toggle = UISwitch()
+        toggle.translatesAutoresizingMaskIntoConstraints = false
+        toggle.onTintColor = AppColors.secondary
+        toggle.isOn = UserDefaults.standard.bool(forKey: UserDefaultsKeys.isDarkModeEnabled)
+        toggle.addTarget(self, action: #selector(darkModeToggled(_:)), for: .valueChanged)
+        self.darkModeSwitch = toggle
+        
+        row.addSubview(iconBg)
+        iconBg.addSubview(iconView)
+        row.addSubview(label)
+        row.addSubview(toggle)
+        
+        NSLayoutConstraint.activate([
+            iconBg.leadingAnchor.constraint(equalTo: row.leadingAnchor, constant: 16),
+            iconBg.centerYAnchor.constraint(equalTo: row.centerYAnchor),
+            iconBg.widthAnchor.constraint(equalToConstant: 30),
+            iconBg.heightAnchor.constraint(equalToConstant: 30),
+            
+            iconView.centerXAnchor.constraint(equalTo: iconBg.centerXAnchor),
+            iconView.centerYAnchor.constraint(equalTo: iconBg.centerYAnchor),
+            iconView.widthAnchor.constraint(equalToConstant: 16),
+            iconView.heightAnchor.constraint(equalToConstant: 16),
+            
+            label.leadingAnchor.constraint(equalTo: iconBg.trailingAnchor, constant: 12),
+            label.centerYAnchor.constraint(equalTo: row.centerYAnchor),
+            
+            toggle.trailingAnchor.constraint(equalTo: row.trailingAnchor, constant: -16),
+            toggle.centerYAnchor.constraint(equalTo: row.centerYAnchor)
+        ])
+        
+        return row
+    }
+    
+    @objc private func darkModeToggled(_ sender: UISwitch) {
+        HapticManager.shared.lightImpact()
+        SceneDelegate.shared?.setDarkMode(sender.isOn)
+    }
+    
+    // MARK: - Custom Rows ile Menü Bölümü
+    private func createMenuSectionWithCustomRows(title: String, customRows: [UIView]) -> UIView {
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.applyCardStyle(cornerRadius: AppLayout.cornerRadius)
+        
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.spacing = 0
+        
+        let titleLabel = UILabel()
+        titleLabel.text = title
+        titleLabel.font = AppFonts.semibold(13)
+        titleLabel.textColor = AppColors.textSecondary
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        container.addSubview(titleLabel)
+        container.addSubview(stackView)
+        
+        for (index, row) in customRows.enumerated() {
+            stackView.addArrangedSubview(row)
+            if index < customRows.count - 1 {
+                let separator = UIView()
+                separator.translatesAutoresizingMaskIntoConstraints = false
+                separator.backgroundColor = AppColors.separator
+                separator.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
+                
+                let separatorContainer = UIView()
+                separatorContainer.translatesAutoresizingMaskIntoConstraints = false
+                separatorContainer.addSubview(separator)
+                NSLayoutConstraint.activate([
+                    separator.leadingAnchor.constraint(equalTo: separatorContainer.leadingAnchor, constant: 52),
+                    separator.trailingAnchor.constraint(equalTo: separatorContainer.trailingAnchor),
+                    separator.topAnchor.constraint(equalTo: separatorContainer.topAnchor),
+                    separator.bottomAnchor.constraint(equalTo: separatorContainer.bottomAnchor)
+                ])
+                stackView.addArrangedSubview(separatorContainer)
+            }
+        }
+        
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 16),
+            titleLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
+            
+            stackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
+            stackView.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -8)
+        ])
+        
+        return container
+    }
+    
     // MARK: - Aksiyonlar
     
     @objc private func logoutTapped() {
@@ -346,18 +472,8 @@ final class ProfileViewController: UIViewController {
         ) { [weak self] in
             do {
                 try AuthService.shared.signOut()
-                
-                // Root ViewController'ı resetleyerek Login ekranına dön (daha güvenli ve temiz)
-                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                   let window = windowScene.windows.filter(\.isKeyWindow).first {
-                    
-                    let loginVC = LoginViewController()
-                    let navVC = UINavigationController(rootViewController: loginVC)
-                    
-                    UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: {
-                        window.rootViewController = navVC
-                    }, completion: nil)
-                }
+                UserDefaults.standard.set(false, forKey: UserDefaultsKeys.hasCompletedOnboarding)
+                SceneDelegate.shared?.showLoginScreen()
             } catch {
                 self?.showErrorAlert(message: "Çıkış yapılırken hata oluştu: \(error.localizedDescription)")
             }
@@ -366,7 +482,7 @@ final class ProfileViewController: UIViewController {
     
     private func handleMenuTap(title: String) {
         HapticManager.shared.lightImpact()
-        if title.contains("Tercihler") || title.contains("Bütçe") {
+        if title.contains("Tercihler") || title.contains("Bütçe") || title.contains("Yemek") || title.contains("İlgi") || title.contains("Ulaşım") {
             let prefVC = PreferencesViewController()
             navigationController?.pushViewController(prefVC, animated: true)
         } else {

@@ -67,4 +67,33 @@ struct Transportation: Codable {
         if let notes = notes { dict["notes"] = notes }
         return dict
     }
+    
+    static func fromDictionary(_ dict: [String: Any]) -> Transportation? {
+        guard let typeRaw = dict["type"] as? String,
+              let type = TransportType(rawValue: typeRaw),
+              let provider = dict["provider"] as? String,
+              let departureCity = dict["departureCity"] as? String,
+              let arrivalCity = dict["arrivalCity"] as? String,
+              let departureTime = dict["departureTime"] as? String,
+              let arrivalTime = dict["arrivalTime"] as? String,
+              let duration = dict["duration"] as? String,
+              let price = dict["price"] as? Double,
+              let classType = dict["classType"] as? String else {
+            return nil
+        }
+        
+        return Transportation(
+            type: type,
+            provider: provider,
+            departureCity: departureCity,
+            arrivalCity: arrivalCity,
+            departureTime: departureTime,
+            arrivalTime: arrivalTime,
+            duration: duration,
+            price: price,
+            returnPrice: dict["returnPrice"] as? Double,
+            classType: classType,
+            notes: dict["notes"] as? String
+        )
+    }
 }

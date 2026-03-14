@@ -113,6 +113,9 @@ final class TripAlternativesViewController: UIViewController {
             return
         }
         
+        // Yükleniyor göster
+        showLoadingOverlay(message: "Planınız kaydediliyor...")
+        
         // Yeni bir Trip nesnesi oluşturuluyor
         let newTrip = Trip(
             id: nil,
@@ -127,24 +130,28 @@ final class TripAlternativesViewController: UIViewController {
             updatedAt: nil
         )
         
-        // Firestore'a kaydet (Animasyonlu bekleme ekranı eklenebilir)
+        // Firestore'a kaydet
         FirestoreService.shared.saveTrip(newTrip) { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let docId):
-                print("Plan başarıyla kaydedildi, ID: \(docId)")
-                // Başarılı! 
-                self.dismiss(animated: true) {
-                    // Ana Tab Bar'ı bul ve 'Tatilim' (index 1) sekmesine geçir.
-                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                       let window = windowScene.windows.filter(\.isKeyWindow).first,
-                       let tabBarController = window.rootViewController as? UITabBarController {
-                        tabBarController.selectedIndex = 1
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                self.hideLoadingOverlay()
+                
+                switch result {
+                case .success(let docId):
+                    print("Plan başarıyla kaydedildi, ID: \(docId)")
+                    
+                    // Önce mevcut navigation/modal'ı kapat
+                    self.dismiss(animated: true) {
+                        // Ana Tab Bar'ı bul ve 'Tatilim' (index 1) sekmesine geçir.
+                        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                           let window = windowScene.windows.filter(\.isKeyWindow).first,
+                           let tabBarController = window.rootViewController as? UITabBarController {
+                            tabBarController.selectedIndex = 1
+                        }
                     }
+                case .failure(let error):
+                    self.showErrorAlert(message: "Plan kaydedilemedi: \(error.localizedDescription)")
                 }
-            case .failure(let error):
-                self.showErrorAlert(message: "Plan kaydedilemedi: \(error.localizedDescription)")
             }
         }
     }

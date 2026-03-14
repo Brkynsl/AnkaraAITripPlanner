@@ -126,7 +126,6 @@ final class FirestoreService: FirestoreServiceProtocol {
     func getTrips(userId: String, completion: @escaping (Result<[Trip], Error>) -> Void) {
         db.collection(FirestoreKeys.Collections.trips)
             .whereField(FirestoreKeys.TripFields.userId, isEqualTo: userId)
-            .order(by: FirestoreKeys.TripFields.createdAt, descending: true)
             .getDocuments { snapshot, error in
                 if let error = error {
                     completion(.failure(error))
@@ -141,8 +140,7 @@ final class FirestoreService: FirestoreServiceProtocol {
                 // Her belgeyi Trip modeline decode et
                 let trips: [Trip] = documents.compactMap { doc in
                     let data = doc.data()
-                    return try? JSONSerialization.data(withJSONObject: data)
-                        .decoded(as: Trip.self)
+                    return Trip.fromDictionary(data, id: doc.documentID)
                 }
                 
                 completion(.success(trips))

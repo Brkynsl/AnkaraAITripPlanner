@@ -34,42 +34,70 @@ struct BudgetBreakdown: Codable {
             "miscellaneous": miscellaneous
         ]
     }
+    
+    static func fromDictionary(_ dict: [String: Any]) -> BudgetBreakdown? {
+        return BudgetBreakdown(
+            transportation: dict["transportation"] as? Double ?? 0,
+            accommodation: dict["accommodation"] as? Double ?? 0,
+            food: dict["food"] as? Double ?? 0,
+            localTransport: dict["localTransport"] as? Double ?? 0,
+            activities: dict["activities"] as? Double ?? 0,
+            miscellaneous: dict["miscellaneous"] as? Double ?? 0
+        )
+    }
 }
 
 // MARK: - Günlük Gezi Planı
-// Bir günün detaylı programını tutar.
-// Sabah, öğlen, akşam ve opsiyonel gece aktivitelerini içerir.
 struct DayPlan: Codable {
-    let dayNumber: Int                // Gün numarası (1, 2, 3...)
-    let title: String                 // Gün başlığı (Örn: "Tarihi Ankara Turu")
-    var activities: [PlannedActivity] // O gün yapılacak aktiviteler
-    var estimatedCost: Double         // O günün tahmini maliyeti
+    let dayNumber: Int
+    let title: String
+    var activities: [PlannedActivity]
+    var estimatedCost: Double
+    var totalDistance: String?          // Günlük toplam mesafe ("~8 km yürüyüş")
     
     func toDictionary() -> [String: Any] {
-        return [
+        var dict: [String: Any] = [
             "dayNumber": dayNumber,
             "title": title,
             "activities": activities.map { $0.toDictionary() },
             "estimatedCost": estimatedCost
         ]
+        if let totalDistance = totalDistance { dict["totalDistance"] = totalDistance }
+        return dict
+    }
+    
+    static func fromDictionary(_ dict: [String: Any]) -> DayPlan? {
+        guard let dayNumber = dict["dayNumber"] as? Int,
+              let title = dict["title"] as? String,
+              let activitiesData = dict["activities"] as? [[String: Any]] else {
+            return nil
+        }
+        
+        let activities = activitiesData.compactMap { PlannedActivity.fromDictionary($0) }
+        let estimatedCost = dict["estimatedCost"] as? Double ?? 0
+        
+        return DayPlan(dayNumber: dayNumber, title: title, activities: activities, estimatedCost: estimatedCost, totalDistance: dict["totalDistance"] as? String)
     }
 }
 
 // MARK: - Planlanan Aktivite
-// Bir gün içindeki tek bir aktiviteyi temsil eder.
-// Müze ziyareti, restoran, gezi noktası vb. olabilir.
 struct PlannedActivity: Codable {
-    let name: String                  // Aktivite adı
-    let description: String           // Kısa açıklama
-    let category: ActivityCategory    // Kategori (müze, restoran, park vb.)
-    let startTime: String             // Başlangıç saati (Örn: "09:00")
-    let endTime: String               // Bitiş saati (Örn: "11:00")
-    let estimatedCost: Double         // Tahmini maliyet
-    let latitude: Double              // Konum enlem
-    let longitude: Double             // Konum boylam
-    let address: String               // Adres
-    let transportToNext: String?      // Bir sonraki noktaya ulaşım bilgisi
-    let transportCost: Double?        // Ulaşım maliyeti
+    let name: String
+    let description: String
+    let category: ActivityCategory
+    let startTime: String
+    let endTime: String
+    let estimatedCost: Double
+    let latitude: Double
+    let longitude: Double
+    let address: String
+    let transportToNext: String?
+    let transportCost: Double?
+    // Yeni alanlar
+    let entryFee: Double?             // Giriş ücreti (0 = ücretsiz)
+    let openingHours: String?         // Açılış saatleri ("09:00-17:00")
+    let transportInfo: String?        // Nasıl gidilir detayı
+    let tips: String?                 // Ziyaretçi ipucu
     
     func toDictionary() -> [String: Any] {
         var dict: [String: Any] = [
@@ -83,13 +111,45 @@ struct PlannedActivity: Codable {
             "longitude": longitude,
             "address": address
         ]
-        if let transportToNext = transportToNext {
-            dict["transportToNext"] = transportToNext
-        }
-        if let transportCost = transportCost {
-            dict["transportCost"] = transportCost
-        }
+        if let transportToNext = transportToNext { dict["transportToNext"] = transportToNext }
+        if let transportCost = transportCost { dict["transportCost"] = transportCost }
+        if let entryFee = entryFee { dict["entryFee"] = entryFee }
+        if let openingHours = openingHours { dict["openingHours"] = openingHours }
+        if let transportInfo = transportInfo { dict["transportInfo"] = transportInfo }
+        if let tips = tips { dict["tips"] = tips }
         return dict
+    }
+    
+    static func fromDictionary(_ dict: [String: Any]) -> PlannedActivity? {
+        guard let name = dict["name"] as? String,
+              let description = dict["description"] as? String,
+              let categoryRaw = dict["category"] as? String,
+              let category = ActivityCategory(rawValue: categoryRaw),
+              let startTime = dict["startTime"] as? String,
+              let endTime = dict["endTime"] as? String,
+              let latitude = dict["latitude"] as? Double,
+              let longitude = dict["longitude"] as? Double,
+              let address = dict["address"] as? String else {
+            return nil
+        }
+        
+        return PlannedActivity(
+            name: name,
+            description: description,
+            category: category,
+            startTime: startTime,
+            endTime: endTime,
+            estimatedCost: dict["estimatedCost"] as? Double ?? 0,
+            latitude: latitude,
+            longitude: longitude,
+            address: address,
+            transportToNext: dict["transportToNext"] as? String,
+            transportCost: dict["transportCost"] as? Double,
+            entryFee: dict["entryFee"] as? Double,
+            openingHours: dict["openingHours"] as? String,
+            transportInfo: dict["transportInfo"] as? String,
+            tips: dict["tips"] as? String
+        )
     }
     
     // CLLocationCoordinate2D — MapKit ile kullanım için
@@ -189,6 +249,40 @@ struct TripPlan: Codable {
             "recommendation": recommendation,
             "fitScore": fitScore
         ]
+    }
+    
+    static func fromDictionary(_ dict: [String: Any]) -> TripPlan? {
+        guard let title = dict["title"] as? String,
+              let description = dict["description"] as? String,
+              let planTypeRaw = dict["planType"] as? String,
+              let planType = PlanType(rawValue: planTypeRaw),
+              let transportData = dict["transportation"] as? [String: Any],
+              let transportation = Transportation.fromDictionary(transportData),
+              let hotelData = dict["hotel"] as? [String: Any],
+              let hotel = Hotel.fromDictionary(hotelData),
+              let dailyPlansData = dict["dailyPlans"] as? [[String: Any]],
+              let breakdownData = dict["budgetBreakdown"] as? [String: Any],
+              let budgetBreakdown = BudgetBreakdown.fromDictionary(breakdownData) else {
+            return nil
+        }
+        
+        let dailyPlans = dailyPlansData.compactMap { DayPlan.fromDictionary($0) }
+        let totalEstimatedCost = dict["totalEstimatedCost"] as? Double ?? 0
+        let recommendation = dict["recommendation"] as? String ?? ""
+        let fitScore = dict["fitScore"] as? Int ?? 0
+        
+        return TripPlan(
+            title: title,
+            description: description,
+            planType: planType,
+            transportation: transportation,
+            hotel: hotel,
+            dailyPlans: dailyPlans,
+            budgetBreakdown: budgetBreakdown,
+            totalEstimatedCost: totalEstimatedCost,
+            recommendation: recommendation,
+            fitScore: fitScore
+        )
     }
 }
 
