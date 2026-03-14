@@ -4,9 +4,9 @@ Ankara AI Trip Planner, kullanıcılara bütçelerine ve tercihlerine göre opti
 
 ## 📱 Uygulama Görselleri
 
-| Giriş Ekranı | AI Planlama | Rota Detayları |
-| :---: | :---: | :---: |
-| ![Login](Screenshots/login.png) | ![Generating](Screenshots/home.png) | ![Details](Screenshots/details.png) |
+| Giriş Ekranı | Ana Sayfa | Seyahat Planla | Bütçe ve Rota Dağılımı | Günlük Gezi Planı |
+| :---: | :---: | :---: | :---: | :---: |
+| ![Login](Screenshots/login.png) | ![Home](Screenshots/home.png) | ![Planla](Screenshots/plan_olustur.png) | ![Rota Detay](Screenshots/rotam_detay.png) | ![Günlük Plan](Screenshots/gunluk_program.png) |
 
 ## 🛠 Kullanılan Teknolojiler
 
