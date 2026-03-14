@@ -1,0 +1,22 @@
+# Xcode
+#
+build/
+DerivedData/
+*.hmap
+*.ipa
+*.playground
+
+# Bundle config
+GoogleService-Info.plist
+
+# Git
+.DS_Store
+UserInterfaceState.xcuserstate
+
+# Swift Package Manager
+.build/
+Packages/
+Package.resolved
+
+# Unit Test
+*.profraw

@@ -1,0 +1,708 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		03FA5104272A0360D5C199C2 /* TripMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091E9FC715D1BF47295569A8 /* TripMapViewController.swift */; };
+		09E0E16128CFFC879AE25FF6 /* OnboardingContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC649C548364D846C296175 /* OnboardingContainerViewController.swift */; };
+		235A66306B50B767EBFF911B /* PreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9679B70C4B202AC62F6F0F /* PreferencesViewController.swift */; };
+		2B6E6BEBE31086A2EE07ED68 /* Attraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A62CB5B089D1D21E9B2084 /* Attraction.swift */; };
+		3F11B86AED4D9725EE3D2895 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18966FCF367A69443E51EDB /* RegisterViewController.swift */; };
+		3F361ED0B9039F4D38E785E9 /* TripPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381FF87FF57E2BDF8E1A3153 /* TripPlan.swift */; };
+		3FAAACEA9626EEE87192A6BE /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF5DD5DA99A91B0E33A251 /* OnboardingViewModel.swift */; };
+		476337F6ED4992E7445C87AF /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D604C5FBC8CAA56CA0F7A1 /* ProfileViewController.swift */; };
+		4B3B16F9E7312A263AE9C358 /* OnboardingPageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139F8E0DA26E83573A2CD1C5 /* OnboardingPageCell.swift */; };
+		4EBBFD65D12284E16C751AA8 /* UIView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E3065F0C6F03F62FACBE32 /* UIView+Helpers.swift */; };
+		5106AFCA6DA641A79821BAB9 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F79F2941A26411546AEC839 /* HapticManager.swift */; };
+		595735386602B91FB2675DAE /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3E7BC2632829E86273C0C9F /* AuthViewModel.swift */; };
+		5BD525C3A0C7F1624961D5D7 /* Transportation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0649FC463D02AC290D62FA9B /* Transportation.swift */; };
+		5EE7CE36F1FE5A5160313EA3 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776DF591E777F0158B021B0A /* NetworkError.swift */; };
+		5FF49E75D3C773153D6456B3 /* TripPlanCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7DF1CC8ECFA3B4041F1C2CC /* TripPlanCell.swift */; };
+		77B14DC1C256AFF6956357DF /* TripAlternativesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7123DE0F5175789AB795EE7 /* TripAlternativesViewController.swift */; };
+		7A4AAA86490765576D64ABDA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F1449C1540BFB47C93F36F /* SceneDelegate.swift */; };
+		7B06E158DFCEDDF92C683957 /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = F68CB5DA005F755A323EEBDB /* UserPreferences.swift */; };
+		8245D18F1F618A7C891996D8 /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9981B88F9EE071B8ACD17D35 /* Trip.swift */; };
+		82CAADE0B5F7232E342DA208 /* FirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9194971A44D3E8BC0557CB8 /* FirestoreService.swift */; };
+		8A7631859F5E648A71251531 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775C175916FB44CC87793E4E /* LocationManager.swift */; };
+		8F144F6DAE94B6AD7E71C55D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97335605ED0511C853F2434E /* Foundation.framework */; };
+		8FA56B9C48279D74E60D23A4 /* TripBuilderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13998DB7252FEA2D8211B28 /* TripBuilderViewController.swift */; };
+		8FFF7DCDCD0CCBC7608019DB /* Validators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14EC8267C167E63B28A9EEB2 /* Validators.swift */; };
+		928CA9B8E9925F8BE57D1B16 /* GeneratingTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBA3C212CDAAD1BFAC771E4 /* GeneratingTripViewController.swift */; };
+		93250CDE627AA2D50C825910 /* UIColor+Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E7981A1D311211BEB70457B /* UIColor+Theme.swift */; };
+		9C2C41E8A2FC0317E51E2D5C /* String+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668F336EE4A7F312BD6D31AE /* String+Validation.swift */; };
+		9C3E79DB7A667CEF3829A3CD /* Hotel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FF18034DF0BDBB7FB52C1E /* Hotel.swift */; };
+		9E254029B9FEFB13693204AC /* ServiceProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB765D9BB9C6880773D799F4 /* ServiceProtocols.swift */; };
+		A312B73B2F65B079004AF3AA /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 1CC0A542F4F0539ADF21BCB4 /* FirebaseAuth */; };
+		A312B73C2F65B079004AF3AA /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 2EC831766AA05B9B7BCEB5FB /* FirebaseFirestore */; };
+		A312B73D2F65B079004AF3AA /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D5D5F16D2C623FC80D39292F /* FirebaseFirestoreSwift */; };
+		A312B73E2F65B079004AF3AA /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 6E18C1761B3DAD73D86D0463 /* Lottie */; };
+		A312B7402F65B3E8004AF3AA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A312B73F2F65B3E8004AF3AA /* GoogleService-Info.plist */; };
+		A4705FF7C6058D425D6356E1 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FD2FD436162BE36E44163B /* LoginViewController.swift */; };
+		B146E5AA3A6660C37D4FC3B6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09BBEF84E0F3BB2668F27906 /* AppDelegate.swift */; };
+		B165F147DD9A37F392CF7FD2 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229A013A3DD3720FD53A4F6A /* ForgotPasswordViewController.swift */; };
+		B4FCB7703038D5CF9F1C1042 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3FEAB37A188C0CB5E256C3 /* AuthService.swift */; };
+		C55EF9812615B6B8354A9183 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E502E7E326191E4DDAF742 /* Constants.swift */; };
+		D586553D362E997ADBC4F3EA /* UIViewController+Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9808D74310BCB896B957604 /* UIViewController+Alerts.swift */; };
+		DB58FA4EC154895DFAC1D4A0 /* Restaurant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14B65A5035CD1060192D312 /* Restaurant.swift */; };
+		DBE6C1EE3D8C1CE0462B39C0 /* AppUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A27E0A0DB0C6D3979CD4CB /* AppUser.swift */; };
+		DC41596F6420BBF454E22596 /* TripDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94628B6A7970AF46DDAF7C98 /* TripDetailViewController.swift */; };
+		E0F8663204C27695D803984B /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66BDBB8B274D5FB0EBB731D4 /* MainTabBarController.swift */; };
+		E3184AC4130DFA021EE70F36 /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9DCBDFF14A52933976EB42 /* APIEndpoint.swift */; };
+		E57EA485644194BEF7048492 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4563C38C6C9540E7AC16C3D /* NetworkManager.swift */; };
+		E85525CFD31E8511EFDCE209 /* MyTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F83FB32FF99EAC96EF9D51 /* MyTripViewController.swift */; };
+		ED198BB4F468AB685EA544EB /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7870B34E2F4497B75DBA5D /* HomeViewController.swift */; };
+		FFFCC6BDC84722C2896D2F02 /* AITripPlannerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206D2E7D84D7D3E465D4E9B5 /* AITripPlannerService.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0649FC463D02AC290D62FA9B /* Transportation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Transportation.swift; sourceTree = "<group>"; };
+		091E9FC715D1BF47295569A8 /* TripMapViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TripMapViewController.swift; sourceTree = "<group>"; };
+		09BBEF84E0F3BB2668F27906 /* AppDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		0D664C736A884424AA91032B /* SETUP_GUIDE.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = SETUP_GUIDE.md; sourceTree = "<group>"; };
+		139F8E0DA26E83573A2CD1C5 /* OnboardingPageCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OnboardingPageCell.swift; sourceTree = "<group>"; };
+		14EC8267C167E63B28A9EEB2 /* Validators.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Validators.swift; sourceTree = "<group>"; };
+		206D2E7D84D7D3E465D4E9B5 /* AITripPlannerService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AITripPlannerService.swift; sourceTree = "<group>"; };
+		229A013A3DD3720FD53A4F6A /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
+		381FF87FF57E2BDF8E1A3153 /* TripPlan.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TripPlan.swift; sourceTree = "<group>"; };
+		3F79F2941A26411546AEC839 /* HapticManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
+		49EF5DD5DA99A91B0E33A251 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
+		55F1449C1540BFB47C93F36F /* SceneDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		59A27E0A0DB0C6D3979CD4CB /* AppUser.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppUser.swift; sourceTree = "<group>"; };
+		5C7870B34E2F4497B75DBA5D /* HomeViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		5E7981A1D311211BEB70457B /* UIColor+Theme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UIColor+Theme.swift"; sourceTree = "<group>"; };
+		60A9F697529CA5B86F6C88BF /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		668F336EE4A7F312BD6D31AE /* String+Validation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "String+Validation.swift"; sourceTree = "<group>"; };
+		66BDBB8B274D5FB0EBB731D4 /* MainTabBarController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
+		6BB79F2F5088A54BCAB4B4F5 /* lottie-ios */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = "lottie-ios"; path = "https://github.com/airbnb/lottie-ios"; sourceTree = "<group>"; };
+		6BEAFFC9161B6E4AE2F12CB2 /* firebase-ios-sdk */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = "firebase-ios-sdk"; path = "https://github.com/firebase/firebase-ios-sdk"; sourceTree = "<group>"; };
+		6E9679B70C4B202AC62F6F0F /* PreferencesViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PreferencesViewController.swift; sourceTree = "<group>"; };
+		775C175916FB44CC87793E4E /* LocationManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		776DF591E777F0158B021B0A /* NetworkError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
+		7EBA3C212CDAAD1BFAC771E4 /* GeneratingTripViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GeneratingTripViewController.swift; sourceTree = "<group>"; };
+		82FD2FD436162BE36E44163B /* LoginViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		83F83FB32FF99EAC96EF9D51 /* MyTripViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MyTripViewController.swift; sourceTree = "<group>"; };
+		8C3FEAB37A188C0CB5E256C3 /* AuthService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		8FC649C548364D846C296175 /* OnboardingContainerViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OnboardingContainerViewController.swift; sourceTree = "<group>"; };
+		94628B6A7970AF46DDAF7C98 /* TripDetailViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TripDetailViewController.swift; sourceTree = "<group>"; };
+		97335605ED0511C853F2434E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		9981B88F9EE071B8ACD17D35 /* Trip.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
+		A14B65A5035CD1060192D312 /* Restaurant.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Restaurant.swift; sourceTree = "<group>"; };
+		A18966FCF367A69443E51EDB /* RegisterViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
+		A312B73F2F65B3E8004AF3AA /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A4563C38C6C9540E7AC16C3D /* NetworkManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		A7FF18034DF0BDBB7FB52C1E /* Hotel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Hotel.swift; sourceTree = "<group>"; };
+		A8A62CB5B089D1D21E9B2084 /* Attraction.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Attraction.swift; sourceTree = "<group>"; };
+		B2E3065F0C6F03F62FACBE32 /* UIView+Helpers.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UIView+Helpers.swift"; sourceTree = "<group>"; };
+		B3E7BC2632829E86273C0C9F /* AuthViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		BB765D9BB9C6880773D799F4 /* ServiceProtocols.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ServiceProtocols.swift; sourceTree = "<group>"; };
+		C9194971A44D3E8BC0557CB8 /* FirestoreService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FirestoreService.swift; sourceTree = "<group>"; };
+		D6D604C5FBC8CAA56CA0F7A1 /* ProfileViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		D7123DE0F5175789AB795EE7 /* TripAlternativesViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TripAlternativesViewController.swift; sourceTree = "<group>"; };
+		D9808D74310BCB896B957604 /* UIViewController+Alerts.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alerts.swift"; sourceTree = "<group>"; };
+		DCF57BB9F4B275482BE44037 /* AnkaraAITripPlanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AnkaraAITripPlanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E13998DB7252FEA2D8211B28 /* TripBuilderViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TripBuilderViewController.swift; sourceTree = "<group>"; };
+		E6E502E7E326191E4DDAF742 /* Constants.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		E7DF1CC8ECFA3B4041F1C2CC /* TripPlanCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TripPlanCell.swift; sourceTree = "<group>"; };
+		EE9DCBDFF14A52933976EB42 /* APIEndpoint.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
+		F68CB5DA005F755A323EEBDB /* UserPreferences.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UserPreferences.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		EEC4A858A6DD487FA698851F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A312B73E2F65B079004AF3AA /* Lottie in Frameworks */,
+				A312B73D2F65B079004AF3AA /* FirebaseFirestoreSwift in Frameworks */,
+				A312B73C2F65B079004AF3AA /* FirebaseFirestore in Frameworks */,
+				A312B73B2F65B079004AF3AA /* FirebaseAuth in Frameworks */,
+				8F144F6DAE94B6AD7E71C55D /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0A248F0B9448ABB1A2CCB23E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				0D664C736A884424AA91032B /* SETUP_GUIDE.md */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		0CF655EBE0800E1EBEC5BF17 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A8A62CB5B089D1D21E9B2084 /* Attraction.swift */,
+				381FF87FF57E2BDF8E1A3153 /* TripPlan.swift */,
+				F68CB5DA005F755A323EEBDB /* UserPreferences.swift */,
+				A7FF18034DF0BDBB7FB52C1E /* Hotel.swift */,
+				59A27E0A0DB0C6D3979CD4CB /* AppUser.swift */,
+				9981B88F9EE071B8ACD17D35 /* Trip.swift */,
+				0649FC463D02AC290D62FA9B /* Transportation.swift */,
+				A14B65A5035CD1060192D312 /* Restaurant.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		1DCE6FDCC14CD4099391DAAE /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				E7DF1CC8ECFA3B4041F1C2CC /* TripPlanCell.swift */,
+				94628B6A7970AF46DDAF7C98 /* TripDetailViewController.swift */,
+				E13998DB7252FEA2D8211B28 /* TripBuilderViewController.swift */,
+				5C7870B34E2F4497B75DBA5D /* HomeViewController.swift */,
+				6E9679B70C4B202AC62F6F0F /* PreferencesViewController.swift */,
+				66BDBB8B274D5FB0EBB731D4 /* MainTabBarController.swift */,
+				091E9FC715D1BF47295569A8 /* TripMapViewController.swift */,
+				7EBA3C212CDAAD1BFAC771E4 /* GeneratingTripViewController.swift */,
+				83F83FB32FF99EAC96EF9D51 /* MyTripViewController.swift */,
+				D6D604C5FBC8CAA56CA0F7A1 /* ProfileViewController.swift */,
+				D7123DE0F5175789AB795EE7 /* TripAlternativesViewController.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		1EBDBCF1DED78E0E58349047 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				3F79F2941A26411546AEC839 /* HapticManager.swift */,
+				775C175916FB44CC87793E4E /* LocationManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		38C55ED49B0F5D121207053D /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				B3E7BC2632829E86273C0C9F /* AuthViewModel.swift */,
+				49EF5DD5DA99A91B0E33A251 /* OnboardingViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		46A453877D5E84C2A36B8DC1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C1A2EB6ADA105DFB3A223B2A /* iOS */,
+				6BEAFFC9161B6E4AE2F12CB2 /* firebase-ios-sdk */,
+				6BB79F2F5088A54BCAB4B4F5 /* lottie-ios */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		497E657CA3726CD8F018F2D7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DCF57BB9F4B275482BE44037 /* AnkaraAITripPlanner.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5172CD5B5F5BA6F2DFF35B0B /* AI */ = {
+			isa = PBXGroup;
+			children = (
+				206D2E7D84D7D3E465D4E9B5 /* AITripPlannerService.swift */,
+			);
+			path = AI;
+			sourceTree = "<group>";
+		};
+		52C12367C4C696F24CCB9C50 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				A4563C38C6C9540E7AC16C3D /* NetworkManager.swift */,
+				EE9DCBDFF14A52933976EB42 /* APIEndpoint.swift */,
+				776DF591E777F0158B021B0A /* NetworkError.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		564600674A37252221D5D672 /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		6B135B1BFD040F0845C47648 = {
+			isa = PBXGroup;
+			children = (
+				497E657CA3726CD8F018F2D7 /* Products */,
+				46A453877D5E84C2A36B8DC1 /* Frameworks */,
+				8085CD82D696CC6809BED60D /* AnkaraAITripPlanner */,
+			);
+			sourceTree = "<group>";
+		};
+		74BAD92496D47088B8996092 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				52C12367C4C696F24CCB9C50 /* Networking */,
+				8AC0566ABC10CED1387F5DA3 /* Firebase */,
+				5172CD5B5F5BA6F2DFF35B0B /* AI */,
+				BC4E0F3FE47F03DBD03248D5 /* Protocols */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		8085CD82D696CC6809BED60D /* AnkaraAITripPlanner */ = {
+			isa = PBXGroup;
+			children = (
+				A312B73F2F65B3E8004AF3AA /* GoogleService-Info.plist */,
+				D3EE44AEA50E75AF2DA7FBC0 /* App */,
+				C1336A14AC1AAC2BFA00A3CB /* Extensions */,
+				1EBDBCF1DED78E0E58349047 /* Managers */,
+				0CF655EBE0800E1EBEC5BF17 /* Models */,
+				0A248F0B9448ABB1A2CCB23E /* Resources */,
+				74BAD92496D47088B8996092 /* Services */,
+				564600674A37252221D5D672 /* Storyboards */,
+				F1FB7E5D852E152D918836ED /* Utilities */,
+				38C55ED49B0F5D121207053D /* ViewModels */,
+				E0508B8A572C224AEEAC2D9E /* Views */,
+				60A9F697529CA5B86F6C88BF /* Info.plist */,
+			);
+			path = AnkaraAITripPlanner;
+			sourceTree = "<group>";
+		};
+		8AC0566ABC10CED1387F5DA3 /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				8C3FEAB37A188C0CB5E256C3 /* AuthService.swift */,
+				C9194971A44D3E8BC0557CB8 /* FirestoreService.swift */,
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
+		BBA61D1CF5F05CDE74C07D38 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				139F8E0DA26E83573A2CD1C5 /* OnboardingPageCell.swift */,
+				8FC649C548364D846C296175 /* OnboardingContainerViewController.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		BC4E0F3FE47F03DBD03248D5 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				BB765D9BB9C6880773D799F4 /* ServiceProtocols.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		C1336A14AC1AAC2BFA00A3CB /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				5E7981A1D311211BEB70457B /* UIColor+Theme.swift */,
+				B2E3065F0C6F03F62FACBE32 /* UIView+Helpers.swift */,
+				D9808D74310BCB896B957604 /* UIViewController+Alerts.swift */,
+				668F336EE4A7F312BD6D31AE /* String+Validation.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		C1A2EB6ADA105DFB3A223B2A /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				97335605ED0511C853F2434E /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		D3EE44AEA50E75AF2DA7FBC0 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				E6E502E7E326191E4DDAF742 /* Constants.swift */,
+				09BBEF84E0F3BB2668F27906 /* AppDelegate.swift */,
+				55F1449C1540BFB47C93F36F /* SceneDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		E0508B8A572C224AEEAC2D9E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				FEB342C67C3888E3EA90E652 /* Auth */,
+				1DCE6FDCC14CD4099391DAAE /* Main */,
+				BBA61D1CF5F05CDE74C07D38 /* Onboarding */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		F1FB7E5D852E152D918836ED /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				14EC8267C167E63B28A9EEB2 /* Validators.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		FEB342C67C3888E3EA90E652 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				229A013A3DD3720FD53A4F6A /* ForgotPasswordViewController.swift */,
+				82FD2FD436162BE36E44163B /* LoginViewController.swift */,
+				A18966FCF367A69443E51EDB /* RegisterViewController.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0F241ED57829AEC1DA36086C /* AnkaraAITripPlanner */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 518168A17ACF9232FDE7752B /* Build configuration list for PBXNativeTarget "AnkaraAITripPlanner" */;
+			buildPhases = (
+				082A4816F7738814CFA7C318 /* Sources */,
+				EEC4A858A6DD487FA698851F /* Frameworks */,
+				ABC6ACB656C9C45698B59D8B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AnkaraAITripPlanner;
+			packageProductDependencies = (
+				1CC0A542F4F0539ADF21BCB4 /* FirebaseAuth */,
+				2EC831766AA05B9B7BCEB5FB /* FirebaseFirestore */,
+				D5D5F16D2C623FC80D39292F /* FirebaseFirestoreSwift */,
+				6E18C1761B3DAD73D86D0463 /* Lottie */,
+			);
+			productName = AnkaraAITripPlanner;
+			productReference = DCF57BB9F4B275482BE44037 /* AnkaraAITripPlanner.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F0894170C335ADA3B2D95F68 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+			};
+			buildConfigurationList = F89A87C124F9DE3E625C923A /* Build configuration list for PBXProject "AnkaraAITripPlanner" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6B135B1BFD040F0845C47648;
+			packageReferences = (
+				9576F3F3C9E4D81C3E03BC90 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				425B55503495E19B2E909079 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+			);
+			productRefGroup = 497E657CA3726CD8F018F2D7 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				0F241ED57829AEC1DA36086C /* AnkaraAITripPlanner */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		ABC6ACB656C9C45698B59D8B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A312B7402F65B3E8004AF3AA /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		082A4816F7738814CFA7C318 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C55EF9812615B6B8354A9183 /* Constants.swift in Sources */,
+				B146E5AA3A6660C37D4FC3B6 /* AppDelegate.swift in Sources */,
+				7A4AAA86490765576D64ABDA /* SceneDelegate.swift in Sources */,
+				93250CDE627AA2D50C825910 /* UIColor+Theme.swift in Sources */,
+				4EBBFD65D12284E16C751AA8 /* UIView+Helpers.swift in Sources */,
+				D586553D362E997ADBC4F3EA /* UIViewController+Alerts.swift in Sources */,
+				9C2C41E8A2FC0317E51E2D5C /* String+Validation.swift in Sources */,
+				5106AFCA6DA641A79821BAB9 /* HapticManager.swift in Sources */,
+				8A7631859F5E648A71251531 /* LocationManager.swift in Sources */,
+				2B6E6BEBE31086A2EE07ED68 /* Attraction.swift in Sources */,
+				3F361ED0B9039F4D38E785E9 /* TripPlan.swift in Sources */,
+				7B06E158DFCEDDF92C683957 /* UserPreferences.swift in Sources */,
+				9C3E79DB7A667CEF3829A3CD /* Hotel.swift in Sources */,
+				DBE6C1EE3D8C1CE0462B39C0 /* AppUser.swift in Sources */,
+				8245D18F1F618A7C891996D8 /* Trip.swift in Sources */,
+				5BD525C3A0C7F1624961D5D7 /* Transportation.swift in Sources */,
+				DB58FA4EC154895DFAC1D4A0 /* Restaurant.swift in Sources */,
+				E57EA485644194BEF7048492 /* NetworkManager.swift in Sources */,
+				E3184AC4130DFA021EE70F36 /* APIEndpoint.swift in Sources */,
+				5EE7CE36F1FE5A5160313EA3 /* NetworkError.swift in Sources */,
+				B4FCB7703038D5CF9F1C1042 /* AuthService.swift in Sources */,
+				82CAADE0B5F7232E342DA208 /* FirestoreService.swift in Sources */,
+				FFFCC6BDC84722C2896D2F02 /* AITripPlannerService.swift in Sources */,
+				9E254029B9FEFB13693204AC /* ServiceProtocols.swift in Sources */,
+				8FFF7DCDCD0CCBC7608019DB /* Validators.swift in Sources */,
+				595735386602B91FB2675DAE /* AuthViewModel.swift in Sources */,
+				3FAAACEA9626EEE87192A6BE /* OnboardingViewModel.swift in Sources */,
+				B165F147DD9A37F392CF7FD2 /* ForgotPasswordViewController.swift in Sources */,
+				A4705FF7C6058D425D6356E1 /* LoginViewController.swift in Sources */,
+				3F11B86AED4D9725EE3D2895 /* RegisterViewController.swift in Sources */,
+				5FF49E75D3C773153D6456B3 /* TripPlanCell.swift in Sources */,
+				DC41596F6420BBF454E22596 /* TripDetailViewController.swift in Sources */,
+				8FA56B9C48279D74E60D23A4 /* TripBuilderViewController.swift in Sources */,
+				ED198BB4F468AB685EA544EB /* HomeViewController.swift in Sources */,
+				235A66306B50B767EBFF911B /* PreferencesViewController.swift in Sources */,
+				E0F8663204C27695D803984B /* MainTabBarController.swift in Sources */,
+				03FA5104272A0360D5C199C2 /* TripMapViewController.swift in Sources */,
+				928CA9B8E9925F8BE57D1B16 /* GeneratingTripViewController.swift in Sources */,
+				E85525CFD31E8511EFDCE209 /* MyTripViewController.swift in Sources */,
+				476337F6ED4992E7445C87AF /* ProfileViewController.swift in Sources */,
+				77B14DC1C256AFF6956357DF /* TripAlternativesViewController.swift in Sources */,
+				4B3B16F9E7312A263AE9C358 /* OnboardingPageCell.swift in Sources */,
+				09E0E16128CFFC879AE25FF6 /* OnboardingContainerViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		05EDC0BB26C9B0F7D095151E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		092D3164670DAE2AFCB63EEE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		35313F48EA82794276E89838 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AnkaraAITripPlanner/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.berkay.AnkaraAITripPlanner;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A081D90B6C63D97FF38C8C13 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AnkaraAITripPlanner/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.berkay.AnkaraAITripPlanner;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		518168A17ACF9232FDE7752B /* Build configuration list for PBXNativeTarget "AnkaraAITripPlanner" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				35313F48EA82794276E89838 /* Release */,
+				A081D90B6C63D97FF38C8C13 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F89A87C124F9DE3E625C923A /* Build configuration list for PBXProject "AnkaraAITripPlanner" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				05EDC0BB26C9B0F7D095151E /* Debug */,
+				092D3164670DAE2AFCB63EEE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		425B55503495E19B2E909079 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
+		9576F3F3C9E4D81C3E03BC90 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1CC0A542F4F0539ADF21BCB4 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9576F3F3C9E4D81C3E03BC90 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		2EC831766AA05B9B7BCEB5FB /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9576F3F3C9E4D81C3E03BC90 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		6E18C1761B3DAD73D86D0463 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 425B55503495E19B2E909079 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
+		D5D5F16D2C623FC80D39292F /* FirebaseFirestoreSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9576F3F3C9E4D81C3E03BC90 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestoreSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = F0894170C335ADA3B2D95F68 /* Project object */;
+}
