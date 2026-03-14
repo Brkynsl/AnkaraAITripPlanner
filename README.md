@@ -6,7 +6,7 @@ Ankara AI Trip Planner, kullanıcılara bütçelerine ve tercihlerine göre opti
 
 | Giriş Ekranı | AI Planlama | Rota Detayları |
 | :---: | :---: | :---: |
-| ![Login](https://raw.githubusercontent.com/Brkynslye/AnkaraAITripPlanner/main/Screenshots/login.png) | ![Generating](https://raw.githubusercontent.com/Brkynslye/AnkaraAITripPlanner/main/Screenshots/generating.png) | ![Details](https://raw.githubusercontent.com/Brkynslye/AnkaraAITripPlanner/main/Screenshots/details.png) |
+| ![Login](Screenshots/login.png) | ![Generating](Screenshots/home.png) | ![Details](Screenshots/details.png) |
 
 ## 🛠 Kullanılan Teknolojiler
 
