@@ -76,6 +76,11 @@ class AITripPlannerService {
 
             let dayActivities = [];
             for (let j = 0; j < activitiesPerDay; j++) {
+                // Eğer aktivite kalmadıysa listeyi tekrar doldur (Böylece istenilen gün kadar plan üretilebilir)
+                if (allActivities.length === 0) {
+                    allActivities = [...cityData.activities].sort(() => 0.5 - Math.random());
+                }
+
                 // Nearest-neighbor
                 allActivities.sort((a, b) => {
                     const distA = calculateDistance(currentLocation.lat, currentLocation.lon, a.latitude, a.longitude);
@@ -86,11 +91,42 @@ class AITripPlannerService {
                 let activity = allActivities.shift();
                 if (!activity) break;
 
+                // Mevcut konumdan bu aktiviteye olan mesafe (metre -> kilometre)
+                const distanceMeters = calculateDistance(currentLocation.lat, currentLocation.lon, activity.latitude, activity.longitude);
+                const distanceKm = distanceMeters / 1000;
+
+                // Karar Ağacı Algoritması (Heuristic Transportation Logic)
+                let transportMode = "";
+                let trCost = 0;
+
+                if (distanceKm < 1.2) {
+                    transportMode = `🚶 Yürüyüş (~${Math.max(5, Math.ceil(distanceKm * 12))} dk)`;
+                    trCost = 0;
+                } else if (distanceKm <= 8) {
+                    if (type === PlanType.ECONOMIC || type === PlanType.BALANCED) {
+                        transportMode = `🚌 Toplu Taşıma (~${Math.ceil(distanceKm * 5)} dk)`;
+                        trCost = 20; // Tam bilet ücreti ortalama
+                    } else {
+                        transportMode = `🚕 Taksi (~${Math.ceil(distanceKm * 2.5)} dk)`;
+                        trCost = 25 + (distanceKm * 20); // 25 TL açılış, KM başı 20 TL
+                    }
+                } else {
+                    if (type === PlanType.ECONOMIC) {
+                        transportMode = `🚌 Uzun Hat / Aktarma (~${Math.ceil(distanceKm * 4)} dk)`;
+                        trCost = 35;
+                    } else {
+                        transportMode = `🚕 Taksi (~${Math.ceil(distanceKm * 2)} dk)`;
+                        trCost = 25 + (distanceKm * 20);
+                    }
+                }
+
                 const startHour = 9 + j * 3;
                 activity = {
                     ...activity,
                     startTime: `${startHour.toString().padStart(2, '0')}:00`,
-                    endTime: `${(startHour + 2).toString().padStart(2, '0')}:00`
+                    endTime: `${(startHour + 2).toString().padStart(2, '0')}:00`,
+                    transportInfo: `${distanceKm.toFixed(1)} km • ${transportMode}`,
+                    transportCost: Math.floor(trCost)
                 };
 
                 dayActivities.push(activity);

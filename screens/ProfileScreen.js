@@ -9,28 +9,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ProfileScreen({ navigation }) {
     const [user, setUser] = useState(null);
-    const [isDarkMode, setIsDarkMode] = useState(false);
 
     useEffect(() => {
         setUser(firebaseAuthService.currentFirebaseUser);
-        loadThemePreference();
     }, []);
-
-    const loadThemePreference = async () => {
-        try {
-            const val = await AsyncStorage.getItem('isDarkModeEnabled');
-            setIsDarkMode(val === 'true');
-        } catch (e) { }
-    };
-
-    const toggleDarkMode = async (value) => {
-        hapticManager.lightImpact();
-        setIsDarkMode(value);
-        try {
-            await AsyncStorage.setItem('isDarkModeEnabled', value ? 'true' : 'false');
-            // Theme hook'u veya context'i tetiklenecek
-        } catch (e) { }
-    };
 
     const handleLogout = () => {
         hapticManager.buttonTap();
@@ -79,8 +61,6 @@ export default function ProfileScreen({ navigation }) {
             <Text style={styles.menuTitle}>{title}</Text>
             {isSwitch ? (
                 <Switch 
-                    value={isDarkMode} 
-                    onValueChange={toggleDarkMode}
                     trackColor={{ true: AppColors.secondary, false: '#3e3e3e' }}
                 />
             ) : (
@@ -128,7 +108,6 @@ export default function ProfileScreen({ navigation }) {
 
             {/* Ayarlar */}
             {renderMenuSection("Ayarlar", [
-                { icon: "moon", title: "Karanlık Mod", color: AppColors.primary, isSwitch: true },
                 { icon: "globe", title: "Dil", color: AppColors.textSecondary },
                 { icon: "notifications", title: "Bildirimler", color: "#FF9500" },
                 { icon: "shield-checkmark", title: "Gizlilik", color: "#34C759" }

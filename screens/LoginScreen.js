@@ -55,7 +55,7 @@ export default function LoginScreen({ navigation }) {
                 {/* Header Alanı */}
                 <View style={styles.headerContainer}>
                     <Ionicons name="airplane" size={64} color={AppColors.secondary} />
-                    <Text style={styles.title}>Ankara AI Trip</Text>
+                    <Text style={styles.title}>Ankara AI Trip Planner</Text>
                     <Text style={styles.subtitle}>Akıllı Seyahat Asistanınız</Text>
                 </View>
 
@@ -119,10 +119,19 @@ export default function LoginScreen({ navigation }) {
                         <View style={styles.line} />
                     </View>
 
-                    <TouchableOpacity style={styles.googleButton} onPress={handleGoogleLogin}>
-                        <Ionicons name="logo-google" size={20} color="#4285F4" />
-                        <Text style={styles.googleButtonText}>Google ile Giriş Yap</Text>
-                    </TouchableOpacity>
+                    <View style={styles.socialButtonsRow}>
+                        <TouchableOpacity style={[styles.socialButton, { backgroundColor: '#FFFFFF' }]} onPress={handleGoogleLogin}>
+                            <Ionicons name="logo-google" size={20} color="#4285F4" />
+                            <Text style={[styles.socialButtonText, { color: '#4285F4' }]}>Google</Text>
+                        </TouchableOpacity>
+
+                        {Platform.OS === 'ios' && (
+                            <TouchableOpacity style={[styles.socialButton, { backgroundColor: '#000000' }]} onPress={() => Alert.alert("Bilgi", "Apple yetkilendirmesi ayarlanacak.")}>
+                                <Ionicons name="logo-apple" size={20} color="#FFFFFF" />
+                                <Text style={[styles.socialButtonText, { color: '#FFFFFF' }]}>Apple</Text>
+                            </TouchableOpacity>
+                        )}
+                    </View>
                 </View>
 
                 {/* Kayıt Ol Linki */}
@@ -230,19 +239,28 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         fontSize: 14,
     },
-    googleButton: {
-        backgroundColor: '#FFFFFF',
+    socialButtonsRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        gap: 12,
+    },
+    socialButton: {
+        flex: 1,
         height: AppLayout.buttonHeight,
         borderRadius: AppLayout.cornerRadius,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
+        elevation: 2,
     },
-    googleButtonText: {
-        color: '#4285F4',
+    socialButtonText: {
         fontSize: 16,
         fontWeight: 'bold',
-        marginLeft: 12,
+        marginLeft: 10,
     },
     registerContainer: {
         marginTop: 40,

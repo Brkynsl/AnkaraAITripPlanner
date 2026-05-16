@@ -1,16 +1,24 @@
 // TripPlanCard.js
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import MapView, { Marker, Polyline, PROVIDER_DEFAULT } from 'react-native-maps';
 import { AppColors, AppLayout } from './theme';
 import { hapticManager } from '../HapticManager';
 
 // Props olarak plan objesi ve onSelect fonksiyonu alır
 export default function TripPlanCard({ plan, onSelect }) {
+    const navigation = useNavigation();
     
     const handleSelect = () => {
         hapticManager.lightImpact();
         if(onSelect) onSelect(plan);
+    };
+
+    const handleOpenMap = () => {
+        hapticManager.lightImpact();
+        navigation.navigate('TripMap', { plan: plan });
     };
 
     // Fiyat formatlama
@@ -30,6 +38,28 @@ export default function TripPlanCard({ plan, onSelect }) {
         }
     };
 
+    // Harita önizleme için tüm noktaları topla
+    const routeCoordinates = [{ latitude: plan.hotel.latitude, longitude: plan.hotel.longitude }];
+    let minX = plan.hotel.latitude, maxX = plan.hotel.latitude;
+    let minY = plan.hotel.longitude, maxY = plan.hotel.longitude;
+
+    plan.dailyPlans.forEach(day => {
+        day.activities.forEach(act => {
+            routeCoordinates.push({ latitude: act.latitude, longitude: act.longitude });
+            minX = Math.min(minX, act.latitude);
+            maxX = Math.max(maxX, act.latitude);
+            minY = Math.min(minY, act.longitude);
+            maxY = Math.max(maxY, act.longitude);
+        });
+    });
+
+    const region = {
+        latitude: (minX + maxX) / 2,
+        longitude: (minY + maxY) / 2,
+        latitudeDelta: Math.max((maxX - minX) * 1.5, 0.05),
+        longitudeDelta: Math.max((maxY - minY) * 1.5, 0.05)
+    };
+
     return (
         <View style={styles.card}>
             {/* Header */}
@@ -45,6 +75,32 @@ export default function TripPlanCard({ plan, onSelect }) {
             <Text style={styles.description} numberOfLines={2}>
                 {plan.description}
             </Text>
+
+            {/* Map Preview (Tıklanabilir) */}
+            <TouchableOpacity style={styles.mapContainer} activeOpacity={0.8} onPress={handleOpenMap}>
+                <MapView
+                    style={styles.map}
+                    provider={PROVIDER_DEFAULT}
+                    region={region}
+                    scrollEnabled={false}
+                    zoomEnabled={false}
+                    pitchEnabled={false}
+                    rotateEnabled={false}
+                    liteMode={Platform.OS === 'android'}
+                >
+                    {/* Sadece Rotayı Göster */}
+                    <Polyline 
+                        coordinates={routeCoordinates} 
+                        strokeColor={AppColors.primary} 
+                        strokeWidth={3} 
+                    />
+                    <Marker coordinate={{ latitude: plan.hotel.latitude, longitude: plan.hotel.longitude }} pinColor={AppColors.accent} />
+                </MapView>
+                <View style={styles.mapOverlay} pointerEvents="none">
+                    <Ionicons name="expand" size={12} color="#FFF" style={{ marginRight: 4 }} />
+                    <Text style={styles.mapOverlayText}>Tam Ekranda İncele</Text>
+                </View>
+            </TouchableOpacity>
 
             {/* Info Stack (Otel & Ulaşım) */}
             <View style={styles.infoStack}>
@@ -109,7 +165,34 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: AppColors.textSecondary,
         lineHeight: 20,
+        marginBottom: 12,
+    },
+    mapContainer: {
+        height: 120,
+        borderRadius: 12,
+        overflow: 'hidden',
         marginBottom: 16,
+        borderWidth: 1,
+        borderColor: 'rgba(255,255,255,0.1)',
+    },
+    map: {
+        ...StyleSheet.absoluteFillObject,
+    },
+    mapOverlay: {
+        position: 'absolute',
+        bottom: 8,
+        right: 8,
+        backgroundColor: 'rgba(0,0,0,0.7)',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 10,
+        paddingVertical: 6,
+        borderRadius: 12,
+    },
+    mapOverlayText: {
+        color: '#FFF',
+        fontSize: 11,
+        fontWeight: 'bold',
     },
     infoStack: {
         flexDirection: 'row',
