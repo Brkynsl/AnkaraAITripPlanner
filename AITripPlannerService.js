@@ -1,5 +1,6 @@
 // AITripPlannerService.js
 import { ActivityCategory, PlanType, TransportType, createBudgetBreakdown, createDayPlan, createTripPlan } from './Models';
+import ankaraPlacesData from './data/ankara_places.json';
 
 // Mesafe hesaplamak için yardımcı fonksiyon (Haversine Formula)
 function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -47,24 +48,39 @@ class AITripPlannerService {
     }
 
     buildOptimizedPlan(title, description, type, city, days, budget, cityData, hotelTier, transportType, fitScore) {
-        let hotel;
-        if (hotelTier === 'budget') {
-            hotel = cityData.hotels[cityData.hotels.length - 1] || cityData.hotels[0];
-        } else if (hotelTier === 'mid') {
-            hotel = cityData.hotels.length > 1 ? cityData.hotels[1] : cityData.hotels[0];
-        } else {
-            hotel = cityData.hotels[0];
-        }
+        
+        // 1. Hedef Bütçe Ölçeklendirmesi (Kullanıcının girdiği 'budget' tavan kabul edilir)
+        // Kullanıcı 20.000 TL dediyse Premium 20.000 TL civarı tutmalı, Eko ve Dengeli daha ucuz olmalı.
+        let targetBudget = budget;
+        if (type === PlanType.ECONOMIC) targetBudget = budget * 0.50;      // Örn: 15.000 için 7.500 TL bandı
+        else if (type === PlanType.BALANCED) targetBudget = budget * 0.75; // Örn: 15.000 için 11.250 TL bandı
+        else if (type === PlanType.COMFORT) targetBudget = budget * 1.05;  // Örn: 15.000 için 15.750 TL bandı (Az da olsa geçebilir)
 
+        // 2. Ulaşım Maliyetlerini Sabit ve Mantıklı Aralıklarla Belirleme
         let transportCost = 0;
         switch (transportType) {
-            case TransportType.FLIGHT: transportCost = Math.random() * (3500 - 1800) + 1800; break;
-            case TransportType.BUS: transportCost = Math.random() * (950 - 450) + 450; break;
-            case TransportType.TRAIN: transportCost = Math.random() * (700 - 300) + 300; break;
-            case TransportType.CAR: transportCost = Math.random() * (2500 - 1200) + 1200; break;
+            case TransportType.FLIGHT: transportCost = 2500; break;
+            case TransportType.BUS: transportCost = 600; break;
+            case TransportType.TRAIN: transportCost = 800; break;
+            case TransportType.CAR: transportCost = 1500; break;
         }
+        
+        // 3. Otel Fiyatını Hedef Bütçeye Göre Matematiksel Seçme
+        const daysToStay = Math.max(1, days - 1);
+        // Aktiviteler ve yemek için günlük ortalama 1000 TL düşüyoruz
+        const estimatedActivitiesCost = days * 1000;
+        const targetTotalHotelCost = targetBudget - transportCost - estimatedActivitiesCost;
+        let targetPricePerNight = targetTotalHotelCost / daysToStay;
 
-        const hotelTotalCost = hotel.pricePerNight * Math.max(1, days - 1);
+        // Eksi veya çok düşük değerlere düşmemesi için alt limit
+        if (targetPricePerNight < 800) targetPricePerNight = 800;
+
+        // Havuzdaki 38 otel içinden, hesapladığımız bu "Hedef Gecelik Fiyata" en yakın olan oteli bul
+        let hotel = cityData.hotels.reduce((prev, curr) => {
+            return (Math.abs(curr.pricePerNight - targetPricePerNight) < Math.abs(prev.pricePerNight - targetPricePerNight) ? curr : prev);
+        });
+
+        const hotelTotalCost = hotel.pricePerNight * daysToStay;
         
         let allActivities = [...cityData.activities].sort(() => 0.5 - Math.random());
         let dailyPlans = [];
@@ -192,20 +208,8 @@ class AITripPlannerService {
 
     ankaraData() {
         return {
-            hotels: [
-                { name: "JW Marriott Ankara", starRating: 5, pricePerNight: 4200, latitude: 39.9075, longitude: 32.8630, address: "Kavaklıdere Mah., Çankaya", distanceToCenter: "3 km", amenities: ["WiFi", "Havuz", "Spa", "Fitness", "Restoran"], rating: 9.3 },
-                { name: "Divan Çukurhan", starRating: 5, pricePerNight: 3200, latitude: 39.9395, longitude: 32.8630, address: "Necatibey Cad., Ulus", distanceToCenter: "0.3 km", amenities: ["WiFi", "Tarihi Bina", "Restoran", "Bar"], rating: 9.5 },
-                { name: "Ibis Ankara Kızılay", starRating: 3, pricePerNight: 1200, latitude: 39.9208, longitude: 32.8543, address: "Kızılay, Çankaya", distanceToCenter: "1 km", amenities: ["WiFi", "Kahvaltı", "Klima"], rating: 8.1 },
-                { name: "Otel Mithat", starRating: 2, pricePerNight: 650, latitude: 39.9178, longitude: 32.8610, address: "Kızılay, Çankaya", distanceToCenter: "0.8 km", amenities: ["WiFi", "Kahvaltı"], rating: 7.2 }
-            ],
-            activities: [
-                { name: "Anıtkabir", description: "Mustafa Kemal Atatürk'ün anıt mezarı.", category: ActivityCategory.LANDMARK, estimatedCost: 0, latitude: 39.9254, longitude: 32.8369, address: "Anıt Cad., Tandoğan", entryFee: 0 },
-                { name: "Ankara Kalesi", description: "Roma döneminden kalma tarihi kale.", category: ActivityCategory.LANDMARK, estimatedCost: 0, latitude: 39.9408, longitude: 32.8642, address: "Kale Mah., Altındağ", entryFee: 0 },
-                { name: "Anadolu Medeniyetleri Müzesi", description: "Dünya'nın en zengin arkeoloji müzelerinden biri.", category: ActivityCategory.MUSEUM, estimatedCost: 0, latitude: 39.9380, longitude: 32.8590, address: "Gözcü Sok. No:2, Ulus", entryFee: 120 },
-                { name: "Hamamönü Tarihi Bölge", description: "Restore edilmiş Osmanlı evleri.", category: ActivityCategory.SHOPPING, estimatedCost: 200, latitude: 39.9366, longitude: 32.8674, address: "Hamamönü Sok., Altındağ", entryFee: 0 },
-                { name: "Tunalı Hilmi Caddesi", description: "Ankara'nın popüler alışveriş ve eğlence caddesi.", category: ActivityCategory.SHOPPING, estimatedCost: 300, latitude: 39.9072, longitude: 32.8612, address: "Tunalı Hilmi Cad., Kavaklıdere", entryFee: 0 },
-                { name: "Kuğulu Park", description: "Ankara'nın simgesi olan kuğuların yaşadığı park.", category: ActivityCategory.PARK, estimatedCost: 0, latitude: 39.9046, longitude: 32.8606, address: "Kuğulu Park, Kavaklıdere", entryFee: 0 }
-            ],
+            hotels: ankaraPlacesData.hotels,
+            activities: ankaraPlacesData.activities,
             transportProviders: { [TransportType.FLIGHT]: "THY / Pegasus", [TransportType.BUS]: "Metro Turizm / Kamil Koç", [TransportType.TRAIN]: "TCDD YHT", [TransportType.CAR]: "Kendi Aracınız" }
         };
     }

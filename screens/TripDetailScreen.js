@@ -7,7 +7,17 @@ import { hapticManager } from '../HapticManager';
 
 export default function TripDetailScreen({ route, navigation }) {
     const { trip } = route.params;
-    const plan = trip.plans[trip.selectedPlanIndex];
+    
+    // Eski veya hatalı veriler için güvenlik kontrolü
+    const plan = trip?.plans ? trip.plans[trip.selectedPlanIndex || 0] : trip;
+
+    if (!plan) {
+        return (
+            <View style={styles.container}>
+                <Text style={{color: '#FFF', textAlign: 'center', marginTop: 100}}>Plan verisi bulunamadı veya bozuk.</Text>
+            </View>
+        );
+    }
 
     const formatPrice = (val) => new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', maximumFractionDigits: 0 }).format(val);
 
@@ -32,11 +42,11 @@ export default function TripDetailScreen({ route, navigation }) {
                 <View style={styles.card}>
                     <Text style={styles.cardTitle}>✈️ Ulaşım</Text>
                     <Text style={styles.cardText}>
-                        {plan.transportation.type.displayName} • {plan.transportation.provider}{'\n'}
-                        🛫 Kalkış: {plan.transportation.departureCity} → {plan.transportation.arrivalCity}{'\n'}
-                        ⏰ {plan.transportation.departureTime} - {plan.transportation.arrivalTime} ({plan.transportation.duration}){'\n'}
-                        💺 Sınıf: {plan.transportation.classType}{'\n'}
-                        💰 Gidiş: ₺{plan.transportation.price} • Dönüş: ₺{plan.transportation.returnPrice || plan.transportation.price}
+                        {plan.transportation?.type?.displayName || plan.transportation?.type || 'Bilinmiyor'} • {plan.transportation?.provider || 'Standart'}{'\n'}
+                        🛫 Kalkış: {plan.transportation?.departureCity || 'İstanbul'} → {plan.transportation?.arrivalCity || trip.city}{'\n'}
+                        ⏰ {plan.transportation?.departureTime || '08:00'} - {plan.transportation?.arrivalTime || '12:00'} ({plan.transportation?.duration || '-'}){'\n'}
+                        💺 Sınıf: {plan.transportation?.classType || 'Standart'}{'\n'}
+                        💰 Gidiş: ₺{plan.transportation?.price || 0} • Dönüş: ₺{plan.transportation?.returnPrice || plan.transportation?.price || 0}
                     </Text>
                 </View>
 
@@ -44,11 +54,11 @@ export default function TripDetailScreen({ route, navigation }) {
                 <View style={styles.card}>
                     <Text style={styles.cardTitle}>🏨 Konaklama</Text>
                     <Text style={styles.cardText}>
-                        {plan.hotel.name} {"⭐".repeat(plan.hotel.starRating)}{'\n'}
-                        📍 {plan.hotel.address} ({plan.hotel.distanceToCenter} merkeze){'\n'}
-                        💰 Gecelik: ₺{plan.hotel.pricePerNight} • Toplam: ₺{plan.hotel.totalPrice}{'\n'}
-                        🕐 Giriş: {plan.hotel.checkIn} • Çıkış: {plan.hotel.checkOut}{'\n'}
-                        🏷️ {plan.hotel.amenities.join(" • ")}
+                        {plan.hotel?.name || 'Otel Bilgisi Yok'} {"⭐".repeat(plan.hotel?.starRating || 3)}{'\n'}
+                        📍 {plan.hotel?.address || '-'} ({plan.hotel?.distanceToCenter || '-'} merkeze){'\n'}
+                        💰 Gecelik: ₺{plan.hotel?.pricePerNight || 0} • Toplam: ₺{plan.hotel?.totalPrice || 0}{'\n'}
+                        🕐 Giriş: {plan.hotel?.checkIn || '14:00'} • Çıkış: {plan.hotel?.checkOut || '12:00'}{'\n'}
+                        🏷️ {plan.hotel?.amenities ? plan.hotel.amenities.join(" • ") : 'WiFi • Restoran • Klima'}
                     </Text>
                 </View>
 
