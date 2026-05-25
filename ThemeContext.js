@@ -22,7 +22,9 @@ const LightTheme = {
     textPrimary: '#000000',
     textSecondary: 'rgba(0, 0, 0, 0.55)',
     textTertiary: 'rgba(0, 0, 0, 0.3)',
+    placeholderText: 'rgba(0, 0, 0, 0.3)',
     border: 'rgba(0, 0, 0, 0.1)',
+    buttonText: '#FFFFFF',
 
     inputBackground: 'rgba(0, 0, 0, 0.05)',
     separatorColor: 'rgba(0, 0, 0, 0.08)',
@@ -40,7 +42,7 @@ const LightTheme = {
 // DARK TEMA (MEVCUT)
 // ==========================================
 const DarkTheme = {
-    primary: '#1C1C1E',
+    primary: '#FFFFFF',
     secondary: '#00C7BF',
     accent: '#FF9500',
     background: '#000000',
@@ -55,14 +57,16 @@ const DarkTheme = {
     textPrimary: '#FFFFFF',
     textSecondary: 'rgba(255, 255, 255, 0.7)',
     textTertiary: 'rgba(255, 255, 255, 0.4)',
+    placeholderText: 'rgba(255, 255, 255, 0.35)',
     border: 'rgba(255, 255, 255, 0.2)',
+    buttonText: '#FFFFFF',
 
-    inputBackground: 'rgba(255, 255, 255, 0.1)',
+    inputBackground: 'rgba(255, 255, 255, 0.12)',
     separatorColor: 'rgba(255, 255, 255, 0.08)',
     overlayBackground: 'rgba(0, 0, 0, 0.6)',
-    iconBackground: 'rgba(255, 255, 255, 0.05)',
-    segmentBackground: 'rgba(0, 0, 0, 0.3)',
-    segmentActiveBackground: 'rgba(255, 255, 255, 0.2)',
+    iconBackground: 'rgba(255, 255, 255, 0.08)',
+    segmentBackground: 'rgba(255, 255, 255, 0.08)',
+    segmentActiveBackground: 'rgba(255, 255, 255, 0.25)',
     switchTrackFalse: '#3e3e3e',
     tabBarInactive: 'rgba(255, 255, 255, 0.4)',
     blurTint: 'dark',

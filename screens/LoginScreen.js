@@ -10,7 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuthViewModel, AuthState } from '../useAuthViewModel';
 import { hapticManager } from '../HapticManager';
 import { useTheme } from '../ThemeContext';
-import { AppLayout } from './theme';
+import { AppLayout, scale, verticalScale, moderateScale } from './theme';
 
 export default function LoginScreen({ navigation }) {
     const { state, errorMsg, signInWithEmail } = useAuthViewModel();
@@ -39,7 +39,20 @@ export default function LoginScreen({ navigation }) {
 
     const handleGoogleLogin = () => {
         hapticManager.buttonTap();
-        Alert.alert("Bilgi", "Google Sign-In entegrasyonu expo-auth-session gibi kütüphaneler gerektirir.");
+        Alert.alert(
+            "Google ile Giriş",
+            "Google Sign-In, Expo Go ortamında doğrudan çalışmaz. Uygulamanın production build'i oluşturulduktan sonra 'expo-auth-session' veya '@react-native-google-signin/google-signin' kütüphanesi ile entegre edilmelidir.\n\nŞu an e-posta ile giriş yapabilirsiniz.",
+            [{ text: "Anladım" }]
+        );
+    };
+
+    const handleAppleLogin = () => {
+        hapticManager.buttonTap();
+        Alert.alert(
+            "Apple ile Giriş",
+            "Apple Sign-In, Expo Go ortamında doğrudan çalışmaz. Uygulamanın production build'i oluşturulduktan sonra 'expo-apple-authentication' kütüphanesi ile entegre edilmelidir.\n\nŞu an e-posta ile giriş yapabilirsiniz.",
+            [{ text: "Anladım" }]
+        );
     };
 
     return (
@@ -52,11 +65,11 @@ export default function LoginScreen({ navigation }) {
                 style={StyleSheet.absoluteFillObject}
             />
             
-            <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+            <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
                 
                 {/* Header Alanı */}
                 <View style={styles.headerContainer}>
-                    <Ionicons name="airplane" size={64} color={colors.secondary} />
+                    <Ionicons name="airplane" size={moderateScale(56)} color={colors.secondary} />
                     <Text style={[styles.title, { color: colors.textPrimary }]}>Ankara AI Trip Planner</Text>
                     <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Akıllı Seyahat Asistanınız</Text>
                 </View>
@@ -66,11 +79,11 @@ export default function LoginScreen({ navigation }) {
                     
                     {/* E-posta */}
                     <View style={[styles.inputContainer, { backgroundColor: colors.inputBackground }]}>
-                        <Ionicons name="mail" size={20} color={colors.textSecondary} style={styles.inputIcon} />
+                        <Ionicons name="mail" size={moderateScale(18)} color={colors.textSecondary} style={styles.inputIcon} />
                         <TextInput 
                             style={[styles.input, { color: colors.textPrimary }]}
                             placeholder="E-posta adresiniz"
-                            placeholderTextColor={colors.textTertiary}
+                            placeholderTextColor={colors.placeholderText}
                             keyboardType="email-address"
                             autoCapitalize="none"
                             value={email}
@@ -80,11 +93,11 @@ export default function LoginScreen({ navigation }) {
 
                     {/* Şifre */}
                     <View style={[styles.inputContainer, { backgroundColor: colors.inputBackground }]}>
-                        <Ionicons name="lock-closed" size={20} color={colors.textSecondary} style={styles.inputIcon} />
+                        <Ionicons name="lock-closed" size={moderateScale(18)} color={colors.textSecondary} style={styles.inputIcon} />
                         <TextInput 
                             style={[styles.input, { color: colors.textPrimary }]}
                             placeholder="Şifreniz"
-                            placeholderTextColor={colors.textTertiary}
+                            placeholderTextColor={colors.placeholderText}
                             secureTextEntry
                             value={password}
                             onChangeText={setPassword}
@@ -122,14 +135,28 @@ export default function LoginScreen({ navigation }) {
                     </View>
 
                     <View style={styles.socialButtonsRow}>
-                        <TouchableOpacity style={[styles.socialButton, { backgroundColor: '#FFFFFF' }]} onPress={handleGoogleLogin}>
-                            <Ionicons name="logo-google" size={20} color="#4285F4" />
-                            <Text style={[styles.socialButtonText, { color: '#4285F4' }]}>Google</Text>
+                        <TouchableOpacity 
+                            style={[styles.socialButton, { 
+                                backgroundColor: colors.isDark ? 'rgba(255,255,255,0.1)' : '#FFFFFF',
+                                borderWidth: colors.isDark ? 1 : 0,
+                                borderColor: colors.border 
+                            }]} 
+                            onPress={handleGoogleLogin}
+                        >
+                            <Ionicons name="logo-google" size={moderateScale(18)} color={colors.isDark ? '#FFFFFF' : '#4285F4'} />
+                            <Text style={[styles.socialButtonText, { color: colors.isDark ? '#FFFFFF' : '#4285F4' }]}>Google</Text>
                         </TouchableOpacity>
 
                         {Platform.OS === 'ios' && (
-                            <TouchableOpacity style={[styles.socialButton, { backgroundColor: '#000000' }]} onPress={() => Alert.alert("Bilgi", "Apple yetkilendirmesi ayarlanacak.")}>
-                                <Ionicons name="logo-apple" size={20} color="#FFFFFF" />
+                            <TouchableOpacity 
+                                style={[styles.socialButton, { 
+                                    backgroundColor: colors.isDark ? 'rgba(255,255,255,0.1)' : '#000000',
+                                    borderWidth: colors.isDark ? 1 : 0,
+                                    borderColor: colors.border
+                                }]} 
+                                onPress={handleAppleLogin}
+                            >
+                                <Ionicons name="logo-apple" size={moderateScale(18)} color="#FFFFFF" />
                                 <Text style={[styles.socialButtonText, { color: '#FFFFFF' }]}>Apple</Text>
                             </TouchableOpacity>
                         )}
@@ -162,17 +189,18 @@ const styles = StyleSheet.create({
     },
     headerContainer: {
         alignItems: 'center',
-        marginBottom: 40,
-        marginTop: 60,
+        marginBottom: verticalScale(32),
+        marginTop: verticalScale(40),
     },
     title: {
-        fontSize: 32,
+        fontSize: moderateScale(28),
         fontWeight: 'bold',
-        marginTop: 16,
+        marginTop: verticalScale(12),
+        textAlign: 'center',
     },
     subtitle: {
-        fontSize: 16,
-        marginTop: 8,
+        fontSize: moderateScale(15),
+        marginTop: verticalScale(6),
     },
     formCard: {
         borderRadius: AppLayout.largeCornerRadius,
@@ -185,55 +213,55 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: AppLayout.cornerRadius,
         height: AppLayout.buttonHeight,
-        marginBottom: 16,
-        paddingHorizontal: 16,
+        marginBottom: verticalScale(14),
+        paddingHorizontal: scale(16),
     },
     inputIcon: {
-        marginRight: 12,
+        marginRight: scale(12),
     },
     input: {
         flex: 1,
-        fontSize: 16,
+        fontSize: moderateScale(15),
     },
     loginButton: {
         height: AppLayout.buttonHeight,
         borderRadius: AppLayout.cornerRadius,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 8,
+        marginTop: verticalScale(6),
     },
     loginButtonText: {
         color: '#FFF',
-        fontSize: 17,
+        fontSize: moderateScale(16),
         fontWeight: 'bold',
     },
     forgotPasswordButton: {
         alignItems: 'center',
-        marginTop: 16,
+        marginTop: verticalScale(14),
     },
     forgotPasswordText: {
-        fontSize: 14,
+        fontSize: moderateScale(13),
     },
     socialContainer: {
-        marginTop: 32,
+        marginTop: verticalScale(28),
     },
     divider: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 24,
+        marginBottom: verticalScale(20),
     },
     line: {
         flex: 1,
         height: 1,
     },
     dividerText: {
-        paddingHorizontal: 12,
-        fontSize: 14,
+        paddingHorizontal: scale(12),
+        fontSize: moderateScale(13),
     },
     socialButtonsRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        gap: 12,
+        gap: scale(12),
     },
     socialButton: {
         flex: 1,
@@ -249,17 +277,17 @@ const styles = StyleSheet.create({
         elevation: 2,
     },
     socialButtonText: {
-        fontSize: 16,
+        fontSize: moderateScale(15),
         fontWeight: 'bold',
-        marginLeft: 10,
+        marginLeft: scale(10),
     },
     registerContainer: {
-        marginTop: 40,
-        marginBottom: 40,
+        marginTop: verticalScale(32),
+        marginBottom: verticalScale(32),
         alignItems: 'center',
     },
     registerText: {
-        fontSize: 15,
+        fontSize: moderateScale(14),
     },
     registerHighlight: {
         fontWeight: 'bold',

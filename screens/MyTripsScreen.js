@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../ThemeContext';
-import { AppLayout } from './theme';
+import { AppLayout, scale, verticalScale, moderateScale } from './theme';
 import { firestoreService } from '../FirestoreService';
 import { firebaseAuthService } from '../FirebaseAuthService';
 import { hapticManager } from '../HapticManager';
@@ -38,7 +38,7 @@ export default function MyTripsScreen({ navigation }) {
 
     const renderEmptyState = () => (
         <View style={styles.emptyState}>
-            <Ionicons name="briefcase-outline" size={100} color={colors.border} />
+            <Ionicons name="briefcase-outline" size={moderateScale(80)} color={colors.border} />
             <Text style={[styles.emptyTitle, { color: colors.textPrimary }]}>Henüz bir tatil planınız yok</Text>
             <Text style={[styles.emptyDesc, { color: colors.textSecondary }]}>
                 Ana sayfadan yeni bir seyahat planı oluşturduğunuzda planlarınız burada görünecek.
@@ -160,22 +160,22 @@ export default function MyTripsScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     container: { flex: 1 },
-    header: { paddingTop: 60, paddingHorizontal: AppLayout.largePadding, paddingBottom: 20, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    headerTitle: { fontSize: 34, fontWeight: 'bold' },
-    selectHeaderButton: { paddingVertical: 6, paddingHorizontal: 12, borderRadius: 16 },
-    selectHeaderButtonText: { fontSize: 16, fontWeight: 'bold' },
-    listContent: { paddingHorizontal: AppLayout.defaultPadding, paddingBottom: 40 },
-    tripCardContainer: { flexDirection: 'row', alignItems: 'center', marginBottom: 16 },
-    tripCard: { flex: 1, borderRadius: AppLayout.cornerRadius, padding: 16, borderWidth: 1 },
-    checkCircle: { marginRight: 12, justifyContent: 'center', alignItems: 'center' },
-    tripTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 4 },
-    tripSubtitle: { fontSize: 14 },
-    bulkDeleteContainer: { position: 'absolute', bottom: 30, left: 20, right: 20 },
-    bulkDeleteButton: { flexDirection: 'row', paddingVertical: 16, borderRadius: AppLayout.cornerRadius, justifyContent: 'center', alignItems: 'center', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.4, shadowRadius: 8, elevation: 6 },
-    bulkDeleteText: { color: '#FFF', fontSize: 16, fontWeight: 'bold' },
-    emptyState: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 40, marginTop: -60 },
-    emptyTitle: { fontSize: 18, fontWeight: 'bold', marginTop: 24, textAlign: 'center' },
-    emptyDesc: { fontSize: 15, textAlign: 'center', marginTop: 8, lineHeight: 22, marginBottom: 32 },
-    createButton: { paddingVertical: 14, paddingHorizontal: 24, borderRadius: AppLayout.cornerRadius },
-    createButtonText: { color: '#FFF', fontSize: 16, fontWeight: 'bold' }
+    header: { paddingTop: AppLayout.headerPaddingTop, paddingHorizontal: AppLayout.largePadding, paddingBottom: verticalScale(20), flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+    headerTitle: { fontSize: moderateScale(32), fontWeight: 'bold' },
+    selectHeaderButton: { paddingVertical: verticalScale(6), paddingHorizontal: scale(12), borderRadius: scale(16) },
+    selectHeaderButtonText: { fontSize: moderateScale(15), fontWeight: 'bold' },
+    listContent: { paddingHorizontal: AppLayout.defaultPadding, paddingBottom: verticalScale(40) },
+    tripCardContainer: { flexDirection: 'row', alignItems: 'center', marginBottom: verticalScale(16) },
+    tripCard: { flex: 1, borderRadius: AppLayout.cornerRadius, padding: scale(16), borderWidth: 1 },
+    checkCircle: { marginRight: scale(12), justifyContent: 'center', alignItems: 'center' },
+    tripTitle: { fontSize: moderateScale(18), fontWeight: 'bold', marginBottom: verticalScale(4) },
+    tripSubtitle: { fontSize: moderateScale(14) },
+    bulkDeleteContainer: { position: 'absolute', bottom: verticalScale(30), left: scale(20), right: scale(20) },
+    bulkDeleteButton: { flexDirection: 'row', paddingVertical: verticalScale(16), borderRadius: AppLayout.cornerRadius, justifyContent: 'center', alignItems: 'center', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.4, shadowRadius: 8, elevation: 6 },
+    bulkDeleteText: { color: '#FFF', fontSize: moderateScale(16), fontWeight: 'bold' },
+    emptyState: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: scale(40), marginTop: verticalScale(-60) },
+    emptyTitle: { fontSize: moderateScale(18), fontWeight: 'bold', marginTop: verticalScale(24), textAlign: 'center' },
+    emptyDesc: { fontSize: moderateScale(14), textAlign: 'center', marginTop: verticalScale(8), lineHeight: moderateScale(22), marginBottom: verticalScale(32) },
+    createButton: { paddingVertical: verticalScale(14), paddingHorizontal: scale(24), borderRadius: AppLayout.cornerRadius },
+    createButtonText: { color: '#FFF', fontSize: moderateScale(15), fontWeight: 'bold' }
 });

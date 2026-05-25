@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Switch, TouchableOpacity } from 'react-native';
 import { useTheme } from '../ThemeContext';
-import { AppLayout } from './theme';
+import { AppLayout, scale, verticalScale, moderateScale } from './theme';
 import { hapticManager } from '../HapticManager';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
@@ -137,18 +137,18 @@ export default function PreferencesScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     container: { flex: 1 },
-    content: { paddingTop: 60, paddingHorizontal: AppLayout.defaultPadding, paddingBottom: 40 },
-    header: { flexDirection: 'row', alignItems: 'center', marginBottom: 30 },
-    backButton: { paddingRight: 16 },
-    headerTitle: { fontSize: 28, fontWeight: 'bold' },
-    section: { marginBottom: 32 },
-    sectionTitle: { fontSize: 13, fontWeight: '600', marginBottom: 8, marginLeft: 16 },
-    card: { borderRadius: AppLayout.cornerRadius, padding: 16 },
-    row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', minHeight: 40 },
-    rowLabel: { fontSize: 16, fontWeight: '500', marginBottom: 12 },
-    separator: { height: 1, marginVertical: 8 },
-    segmentedControl: { flexDirection: 'row', borderRadius: 8, padding: 4 },
-    segmentButton: { flex: 1, paddingVertical: 8, alignItems: 'center', borderRadius: 6 },
-    segmentText: { fontSize: 14, fontWeight: '500' },
-    infoText: { fontSize: 13, textAlign: 'center', paddingHorizontal: 20, marginTop: 20, lineHeight: 20 }
+    content: { paddingTop: AppLayout.headerPaddingTop, paddingHorizontal: AppLayout.defaultPadding, paddingBottom: verticalScale(40) },
+    header: { flexDirection: 'row', alignItems: 'center', marginBottom: verticalScale(30) },
+    backButton: { paddingRight: scale(16) },
+    headerTitle: { fontSize: moderateScale(28), fontWeight: 'bold' },
+    section: { marginBottom: verticalScale(32) },
+    sectionTitle: { fontSize: moderateScale(13), fontWeight: '600', marginBottom: verticalScale(8), marginLeft: scale(16) },
+    card: { borderRadius: AppLayout.cornerRadius, padding: scale(16) },
+    row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', minHeight: verticalScale(40) },
+    rowLabel: { fontSize: moderateScale(16), fontWeight: '500', marginBottom: verticalScale(12) },
+    separator: { height: 1, marginVertical: verticalScale(8) },
+    segmentedControl: { flexDirection: 'row', borderRadius: scale(8), padding: scale(4) },
+    segmentButton: { flex: 1, paddingVertical: verticalScale(8), alignItems: 'center', borderRadius: scale(6) },
+    segmentText: { fontSize: moderateScale(14), fontWeight: '500' },
+    infoText: { fontSize: moderateScale(13), textAlign: 'center', paddingHorizontal: scale(20), marginTop: verticalScale(20), lineHeight: moderateScale(20) }
 });

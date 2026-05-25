@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, Alert, Modal, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../ThemeContext';
-import { AppLayout } from './theme';
+import { AppLayout, scale, verticalScale, moderateScale } from './theme';
 import TripPlanCard from './TripPlanCard';
 import { firestoreService } from '../FirestoreService';
 import { firebaseAuthService } from '../FirebaseAuthService';
@@ -108,20 +108,20 @@ export default function TripAlternativesScreen({ route, navigation }) {
 
 const styles = StyleSheet.create({
     container: { flex: 1 },
-    header: { paddingTop: 60, paddingHorizontal: AppLayout.largePadding, paddingBottom: 16 },
-    backButton: { width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center', marginBottom: 12 },
-    title: { fontSize: 26, fontWeight: 'bold', marginBottom: 8 },
-    subtitle: { fontSize: 15, lineHeight: 22 },
+    header: { paddingTop: AppLayout.headerPaddingTop, paddingHorizontal: AppLayout.largePadding, paddingBottom: verticalScale(16) },
+    backButton: { width: scale(40), height: scale(40), borderRadius: scale(20), justifyContent: 'center', alignItems: 'center', marginBottom: verticalScale(12) },
+    title: { fontSize: moderateScale(26), fontWeight: 'bold', marginBottom: verticalScale(8) },
+    subtitle: { fontSize: moderateScale(15), lineHeight: moderateScale(22) },
     loadingOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.8)', justifyContent: 'center', alignItems: 'center', zIndex: 1000 },
-    loadingText: { color: '#FFF', marginTop: 16, fontSize: 16, fontWeight: 'bold' },
-    modalOverlay: { ...StyleSheet.absoluteFillObject, justifyContent: 'center', alignItems: 'center', padding: 20, zIndex: 999 },
-    modalContent: { width: '100%', borderRadius: AppLayout.largeCornerRadius, padding: 24, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 10, elevation: 8 },
-    modalTitle: { fontSize: 20, fontWeight: 'bold', marginBottom: 8 },
-    modalSubtitle: { fontSize: 14, marginBottom: 20, lineHeight: 20 },
-    modalInput: { borderWidth: 1, borderRadius: AppLayout.cornerRadius, fontSize: 16, paddingHorizontal: 16, paddingVertical: 14, marginBottom: 24 },
-    modalButtons: { flexDirection: 'row', justifyContent: 'flex-end', gap: 12 },
-    modalCancelButton: { paddingVertical: 12, paddingHorizontal: 20, borderRadius: AppLayout.cornerRadius },
-    modalCancelText: { fontSize: 16, fontWeight: 'bold' },
-    modalSaveButton: { paddingVertical: 12, paddingHorizontal: 24, borderRadius: AppLayout.cornerRadius },
-    modalSaveText: { color: '#FFF', fontSize: 16, fontWeight: 'bold' }
+    loadingText: { color: '#FFF', marginTop: verticalScale(16), fontSize: moderateScale(16), fontWeight: 'bold' },
+    modalOverlay: { ...StyleSheet.absoluteFillObject, justifyContent: 'center', alignItems: 'center', padding: scale(20), zIndex: 999 },
+    modalContent: { width: '100%', borderRadius: AppLayout.largeCornerRadius, padding: scale(24), shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 10, elevation: 8 },
+    modalTitle: { fontSize: moderateScale(20), fontWeight: 'bold', marginBottom: verticalScale(8) },
+    modalSubtitle: { fontSize: moderateScale(14), marginBottom: verticalScale(20), lineHeight: moderateScale(20) },
+    modalInput: { borderWidth: 1, borderRadius: AppLayout.cornerRadius, fontSize: moderateScale(16), paddingHorizontal: scale(16), paddingVertical: verticalScale(14), marginBottom: verticalScale(24) },
+    modalButtons: { flexDirection: 'row', justifyContent: 'flex-end', gap: scale(12) },
+    modalCancelButton: { paddingVertical: verticalScale(12), paddingHorizontal: scale(20), borderRadius: AppLayout.cornerRadius },
+    modalCancelText: { fontSize: moderateScale(16), fontWeight: 'bold' },
+    modalSaveButton: { paddingVertical: verticalScale(12), paddingHorizontal: scale(24), borderRadius: AppLayout.cornerRadius },
+    modalSaveText: { color: '#FFF', fontSize: moderateScale(16), fontWeight: 'bold' }
 });

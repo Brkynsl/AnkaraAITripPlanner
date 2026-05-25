@@ -5,6 +5,7 @@ import MapView, { Marker, Polyline, PROVIDER_DEFAULT } from 'react-native-maps';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../ThemeContext';
 import { hapticManager } from '../HapticManager';
+import { AppLayout, scale, verticalScale, moderateScale } from './theme';
 
 const { width, height } = Dimensions.get('window');
 
@@ -85,6 +86,7 @@ export default function TripMapScreen({ route, navigation }) {
                 style={styles.map}
                 provider={PROVIDER_DEFAULT}
                 region={initialRegion}
+                userInterfaceStyle={colors.isDark ? 'dark' : 'light'}
             >
                 <Marker 
                     coordinate={{ latitude: plan.hotel.latitude, longitude: plan.hotel.longitude }}
@@ -96,10 +98,10 @@ export default function TripMapScreen({ route, navigation }) {
                     </View>
                 </Marker>
 
-                <Polyline coordinates={routeCoordinates} strokeColor={colors.isDark ? colors.primary : '#1C1C1E'} strokeWidth={4} lineDashPattern={[8, 4]} />
+                <Polyline coordinates={routeCoordinates} strokeColor={colors.secondary} strokeWidth={4} lineDashPattern={[8, 4]} />
 
                 {daysToShow.map((day) => {
-                    const routeColors = [colors.isDark ? colors.primary : '#1C1C1E', colors.secondary, '#4CAF50', '#9C27B0', '#FF9800'];
+                    const routeColors = ['#E91E63', '#2196F3', '#4CAF50', '#9C27B0', '#FF9800'];
                     const color = routeColors[(day.dayNumber - 1) % routeColors.length];
 
                     return (
@@ -180,20 +182,20 @@ export default function TripMapScreen({ route, navigation }) {
 const styles = StyleSheet.create({
     container: { flex: 1 },
     map: { width, height },
-    closeButton: { position: 'absolute', top: 50, right: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 4 },
-    infoCard: { position: 'absolute', bottom: 0, left: 0, right: 0, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 20, paddingBottom: 30, shadowColor: '#000', shadowOffset: { width: 0, height: -4 }, shadowOpacity: 0.2, shadowRadius: 10, elevation: 10 },
+    closeButton: { position: 'absolute', top: AppLayout.headerPaddingTop, right: scale(20), shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 4 },
+    infoCard: { position: 'absolute', bottom: 0, left: 0, right: 0, borderTopLeftRadius: scale(20), borderTopRightRadius: scale(20), padding: scale(20), paddingBottom: verticalScale(30), shadowColor: '#000', shadowOffset: { width: 0, height: -4 }, shadowOpacity: 0.2, shadowRadius: 10, elevation: 10 },
     infoContent: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-    infoTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 8 },
-    infoSubtitle: { fontSize: 14, marginBottom: 8 },
-    badge: { alignSelf: 'flex-start', paddingHorizontal: 12, paddingVertical: 4, borderRadius: 12 },
-    badgeText: { color: '#FFF', fontSize: 11, fontWeight: 'bold' },
-    directionsButton: { backgroundColor: '#4285F4', width: 80, height: 80, borderRadius: 40, alignItems: 'center', justifyContent: 'center', marginLeft: 10, shadowColor: '#4285F4', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.4, shadowRadius: 8, elevation: 6 },
-    directionsText: { color: '#FFF', fontSize: 12, fontWeight: 'bold', marginTop: 4 },
-    segmentContainer: { position: 'absolute', top: 50, left: 20, right: 70, height: 40 },
+    infoTitle: { fontSize: moderateScale(18), fontWeight: 'bold', marginBottom: verticalScale(8) },
+    infoSubtitle: { fontSize: moderateScale(14), marginBottom: verticalScale(8) },
+    badge: { alignSelf: 'flex-start', paddingHorizontal: scale(12), paddingVertical: verticalScale(4), borderRadius: scale(12) },
+    badgeText: { color: '#FFF', fontSize: moderateScale(11), fontWeight: 'bold' },
+    directionsButton: { backgroundColor: '#4285F4', width: scale(80), height: scale(80), borderRadius: scale(40), alignItems: 'center', justifyContent: 'center', marginLeft: scale(10), shadowColor: '#4285F4', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.4, shadowRadius: 8, elevation: 6 },
+    directionsText: { color: '#FFF', fontSize: moderateScale(12), fontWeight: 'bold', marginTop: verticalScale(4) },
+    segmentContainer: { position: 'absolute', top: AppLayout.headerPaddingTop, left: scale(20), right: scale(70), height: verticalScale(40) },
     segmentScroll: { alignItems: 'center' },
-    segmentButton: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, marginRight: 8, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 4, elevation: 4 },
-    segmentText: { fontWeight: '600' },
+    segmentButton: { paddingHorizontal: scale(16), paddingVertical: verticalScale(8), borderRadius: scale(20), marginRight: scale(8), shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 4, elevation: 4 },
+    segmentText: { fontWeight: '600', fontSize: moderateScale(14) },
     segmentTextActive: { color: '#FFF' },
-    customPin: { width: 30, height: 30, borderRadius: 15, justifyContent: 'center', alignItems: 'center', borderWidth: 2, borderColor: '#FFF', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.3, shadowRadius: 3, elevation: 4 },
-    customPinText: { color: '#FFF', fontSize: 14, fontWeight: 'bold' }
+    customPin: { width: scale(30), height: scale(30), borderRadius: scale(15), justifyContent: 'center', alignItems: 'center', borderWidth: 2, borderColor: '#FFF', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.3, shadowRadius: 3, elevation: 4 },
+    customPinText: { color: '#FFF', fontSize: moderateScale(14), fontWeight: 'bold' }
 });

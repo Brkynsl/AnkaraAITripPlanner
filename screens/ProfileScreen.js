@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../ThemeContext';
-import { AppLayout } from './theme';
+import { AppLayout, scale, verticalScale, moderateScale } from './theme';
 import { firebaseAuthService } from '../FirebaseAuthService';
 import { hapticManager } from '../HapticManager';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -61,9 +61,9 @@ export default function ProfileScreen({ navigation }) {
             activeOpacity={isSwitch ? 1 : 0.7}
         >
             <View style={[styles.iconBg, { backgroundColor: color + '20' }]}>
-                <Ionicons name={icon} size={16} color={color} />
+                <Ionicons name={icon} size={moderateScale(16)} color={color} />
             </View>
-            <Text style={[styles.menuTitle, { color: colors.textPrimary }]}>{title}</Text>
+            <Text style={[styles.menuTitle, { color: colors.textPrimary }]} numberOfLines={1}>{title}</Text>
             {isSwitch ? (
                 <Switch 
                     value={switchValue}
@@ -100,8 +100,8 @@ export default function ProfileScreen({ navigation }) {
                     <Ionicons name="person" size={40} color={colors.secondary} />
                 </View>
                 <View style={styles.userInfo}>
-                    <Text style={[styles.userName, { color: colors.textPrimary }]}>{user?.displayName || "Kullanıcı"}</Text>
-                    <Text style={[styles.userEmail, { color: colors.textSecondary }]}>{user?.email || ""}</Text>
+                    <Text style={[styles.userName, { color: colors.textPrimary }]} numberOfLines={1}>{user?.displayName || "Kullanıcı"}</Text>
+                    <Text style={[styles.userEmail, { color: colors.textSecondary }]} numberOfLines={1}>{user?.email || ""}</Text>
                 </View>
             </View>
 
@@ -140,20 +140,20 @@ export default function ProfileScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     container: { flex: 1 },
-    content: { paddingTop: 60, paddingHorizontal: AppLayout.defaultPadding, paddingBottom: 40 },
-    headerTitle: { fontSize: 34, fontWeight: 'bold', marginBottom: 20 },
-    profileCard: { flexDirection: 'row', alignItems: 'center', borderRadius: AppLayout.largeCornerRadius, padding: 20, marginBottom: 24, borderWidth: 1 },
-    avatarContainer: { width: 70, height: 70, borderRadius: 35, alignItems: 'center', justifyContent: 'center', marginRight: 16 },
+    content: { paddingTop: AppLayout.headerPaddingTop, paddingHorizontal: AppLayout.defaultPadding, paddingBottom: verticalScale(40) },
+    headerTitle: { fontSize: moderateScale(34), fontWeight: 'bold', marginBottom: verticalScale(20) },
+    profileCard: { flexDirection: 'row', alignItems: 'center', borderRadius: AppLayout.largeCornerRadius, padding: scale(20), marginBottom: verticalScale(24), borderWidth: 1 },
+    avatarContainer: { width: scale(70), height: scale(70), borderRadius: scale(35), alignItems: 'center', justifyContent: 'center', marginRight: scale(16) },
     userInfo: { flex: 1 },
-    userName: { fontSize: 20, fontWeight: 'bold', marginBottom: 4 },
-    userEmail: { fontSize: 14 },
-    sectionContainer: { marginBottom: 24 },
-    sectionTitle: { fontSize: 13, fontWeight: '600', marginBottom: 8, marginLeft: 16, textTransform: 'uppercase' },
+    userName: { fontSize: moderateScale(20), fontWeight: 'bold', marginBottom: verticalScale(4) },
+    userEmail: { fontSize: moderateScale(14) },
+    sectionContainer: { marginBottom: verticalScale(24) },
+    sectionTitle: { fontSize: moderateScale(13), fontWeight: '600', marginBottom: verticalScale(8), marginLeft: scale(16), textTransform: 'uppercase' },
     card: { borderRadius: AppLayout.cornerRadius, overflow: 'hidden' },
-    menuRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 12, paddingHorizontal: 16, minHeight: 50 },
-    iconBg: { width: 30, height: 30, borderRadius: 8, alignItems: 'center', justifyContent: 'center', marginRight: 12 },
-    menuTitle: { flex: 1, fontSize: 16 },
-    separator: { height: 1, marginLeft: 58 },
-    logoutButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: AppLayout.cornerRadius, height: AppLayout.buttonHeight, marginTop: 10 },
-    logoutText: { fontSize: 16, fontWeight: 'bold' }
+    menuRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: verticalScale(12), paddingHorizontal: scale(16), minHeight: verticalScale(50) },
+    iconBg: { width: scale(30), height: scale(30), borderRadius: scale(8), alignItems: 'center', justifyContent: 'center', marginRight: scale(12) },
+    menuTitle: { flex: 1, fontSize: moderateScale(16) },
+    separator: { height: 1, marginLeft: scale(58) },
+    logoutButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: AppLayout.cornerRadius, height: AppLayout.buttonHeight, marginTop: verticalScale(10) },
+    logoutText: { fontSize: moderateScale(16), fontWeight: 'bold' }
 });

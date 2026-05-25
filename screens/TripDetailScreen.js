@@ -3,7 +3,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../ThemeContext';
-import { AppLayout } from './theme';
+import { AppLayout, scale, verticalScale, moderateScale } from './theme';
 import { hapticManager } from '../HapticManager';
 
 export default function TripDetailScreen({ route, navigation }) {
@@ -41,9 +41,9 @@ export default function TripDetailScreen({ route, navigation }) {
                 
                 {/* 1. Hero Header */}
                 <View style={[styles.heroCard, { backgroundColor: colors.isDark ? 'rgba(0, 180, 216, 0.15)' : 'rgba(0, 199, 191, 0.1)' }]}>
-                    <Ionicons name="airplane" size={40} color={colors.isDark ? colors.primary : colors.secondary} style={{ marginBottom: 12 }} />
+                <Ionicons name="airplane" size={moderateScale(36)} color={colors.secondary} style={{ marginBottom: verticalScale(10) }} />
                     <Text style={[styles.heroTitle, { color: colors.textPrimary }]}>{trip.city} Seyahati</Text>
-                    <Text style={[styles.heroSubtitle, { color: colors.secondary }]}>{trip.days} Gün • {plan.title} • {formatPrice(plan.totalEstimatedCost)}</Text>
+                    <Text style={[styles.heroSubtitle, { color: colors.secondary }]} numberOfLines={2}>{trip.days} Gün • {plan.title} • {formatPrice(plan.totalEstimatedCost)}</Text>
                     <Text style={[styles.heroDesc, { color: colors.textSecondary }]}>{plan.description}</Text>
                 </View>
 
@@ -76,7 +76,7 @@ export default function TripDetailScreen({ route, navigation }) {
                 {plan.dailyPlans.map((day, idx) => (
                     <View key={idx} style={[styles.card, { backgroundColor: colors.cardBackgroundRGBA }]}>
                         <View style={[styles.dayHeader, { borderBottomColor: colors.border }]}>
-                            <Text style={[styles.dayTitle, { color: colors.isDark ? colors.primary : colors.textPrimary }]}>{day.title}</Text>
+                            <Text style={[styles.dayTitle, { color: colors.textPrimary }]}>{day.title}</Text>
                             <Text style={[styles.dayCost, { color: colors.secondary }]}>₺{day.estimatedCost}</Text>
                         </View>
                         
@@ -84,7 +84,7 @@ export default function TripDetailScreen({ route, navigation }) {
                             <View key={i} style={styles.activityRow}>
                                 <View style={[styles.activityDot, { backgroundColor: colors.secondary }]}><Text style={styles.dotText}>{i+1}</Text></View>
                                 <View style={styles.activityContent}>
-                                    <Text style={[styles.actName, { color: colors.textPrimary }]}>{act.name}</Text>
+                                    <Text style={[styles.actName, { color: colors.textPrimary }]} numberOfLines={2}>{act.name}</Text>
                                     <Text style={[styles.actTime, { color: colors.secondary }]}>🕐 {act.startTime} - {act.endTime}</Text>
                                     <Text style={[styles.actDesc, { color: colors.textSecondary }]}>{act.description}</Text>
                                     {act.entryFee > 0 && <Text style={[styles.actFee, { color: colors.accent, backgroundColor: colors.isDark ? 'rgba(255,107,53,0.1)' : 'rgba(255,149,0,0.1)' }]}>💰 ₺{act.entryFee}</Text>}
@@ -98,7 +98,7 @@ export default function TripDetailScreen({ route, navigation }) {
             </ScrollView>
 
             {/* Harita Butonu (Floating) */}
-            <TouchableOpacity style={[styles.floatingButton, { backgroundColor: colors.isDark ? colors.primary : '#1C1C1E', shadowColor: colors.isDark ? colors.primary : '#1C1C1E' }]} onPress={handleOpenMap}>
+            <TouchableOpacity style={[styles.floatingButton, { backgroundColor: colors.isDark ? colors.secondary : '#1C1C1E', shadowColor: colors.isDark ? colors.secondary : '#1C1C1E' }]} onPress={handleOpenMap}>
                 <Ionicons name="map" size={20} color="#FFF" style={{ marginRight: 8 }} />
                 <Text style={styles.floatingButtonText}>Haritada Gör</Text>
             </TouchableOpacity>
@@ -108,31 +108,31 @@ export default function TripDetailScreen({ route, navigation }) {
 
 const styles = StyleSheet.create({
     container: { flex: 1 },
-    header: { flexDirection: 'row', alignItems: 'center', paddingTop: 60, paddingHorizontal: AppLayout.defaultPadding, paddingBottom: 10 },
-    backButton: { width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center', marginRight: 16 },
-    headerTitleText: { fontSize: 24, fontWeight: 'bold' },
+    header: { flexDirection: 'row', alignItems: 'center', paddingTop: AppLayout.headerPaddingTop, paddingHorizontal: AppLayout.defaultPadding, paddingBottom: verticalScale(8) },
+    backButton: { width: scale(40), height: scale(40), borderRadius: scale(20), justifyContent: 'center', alignItems: 'center', marginRight: scale(14) },
+    headerTitleText: { fontSize: moderateScale(22), fontWeight: 'bold' },
     scroll: { flex: 1 },
-    content: { padding: AppLayout.defaultPadding, paddingBottom: 100 },
-    heroCard: { borderRadius: 20, padding: 20, marginBottom: 20 },
-    heroTitle: { fontSize: 26, fontWeight: 'bold', marginBottom: 6 },
-    heroSubtitle: { fontSize: 15, fontWeight: '500', marginBottom: 8 },
-    heroDesc: { fontSize: 14, lineHeight: 20 },
-    card: { borderRadius: AppLayout.cornerRadius, padding: 16, marginBottom: 16 },
-    cardTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 8 },
-    cardText: { fontSize: 14, lineHeight: 22 },
-    sectionTitle: { fontSize: 22, fontWeight: 'bold', marginTop: 10, marginBottom: 16 },
-    dayHeader: { flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 1, paddingBottom: 12, marginBottom: 12 },
-    dayTitle: { fontSize: 18, fontWeight: 'bold' },
-    dayCost: { fontSize: 16, fontWeight: 'bold' },
-    activityRow: { flexDirection: 'row', marginBottom: 16 },
-    activityDot: { width: 24, height: 24, borderRadius: 12, alignItems: 'center', justifyContent: 'center', marginRight: 12, marginTop: 2 },
-    dotText: { color: '#FFF', fontSize: 12, fontWeight: 'bold' },
+    content: { padding: AppLayout.defaultPadding, paddingBottom: verticalScale(100) },
+    heroCard: { borderRadius: scale(20), padding: scale(18), marginBottom: verticalScale(18) },
+    heroTitle: { fontSize: moderateScale(24), fontWeight: 'bold', marginBottom: verticalScale(4) },
+    heroSubtitle: { fontSize: moderateScale(14), fontWeight: '500', marginBottom: verticalScale(6) },
+    heroDesc: { fontSize: moderateScale(13), lineHeight: moderateScale(19) },
+    card: { borderRadius: AppLayout.cornerRadius, padding: scale(14), marginBottom: verticalScale(14) },
+    cardTitle: { fontSize: moderateScale(16), fontWeight: 'bold', marginBottom: verticalScale(6) },
+    cardText: { fontSize: moderateScale(13), lineHeight: moderateScale(20) },
+    sectionTitle: { fontSize: moderateScale(20), fontWeight: 'bold', marginTop: verticalScale(8), marginBottom: verticalScale(14) },
+    dayHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomWidth: 1, paddingBottom: verticalScale(10), marginBottom: verticalScale(10) },
+    dayTitle: { fontSize: moderateScale(16), fontWeight: 'bold', flex: 1, marginRight: scale(8) },
+    dayCost: { fontSize: moderateScale(15), fontWeight: 'bold' },
+    activityRow: { flexDirection: 'row', marginBottom: verticalScale(14) },
+    activityDot: { width: scale(24), height: scale(24), borderRadius: scale(12), alignItems: 'center', justifyContent: 'center', marginRight: scale(10), marginTop: verticalScale(2) },
+    dotText: { color: '#FFF', fontSize: moderateScale(11), fontWeight: 'bold' },
     activityContent: { flex: 1 },
-    actName: { fontSize: 16, fontWeight: 'bold' },
-    actTime: { fontSize: 13, marginBottom: 4 },
-    actDesc: { fontSize: 14, marginBottom: 4 },
-    actFee: { fontSize: 12, alignSelf: 'flex-start', paddingHorizontal: 8, paddingVertical: 2, borderRadius: 8, marginBottom: 4 },
-    actTransport: { fontSize: 13 },
-    floatingButton: { position: 'absolute', bottom: 30, alignSelf: 'center', flexDirection: 'row', paddingVertical: 14, paddingHorizontal: 24, borderRadius: 30, elevation: 8, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.4, shadowRadius: 8 },
-    floatingButtonText: { color: '#FFF', fontSize: 16, fontWeight: 'bold' }
+    actName: { fontSize: moderateScale(15), fontWeight: 'bold', marginBottom: verticalScale(2) },
+    actTime: { fontSize: moderateScale(12), marginBottom: verticalScale(3) },
+    actDesc: { fontSize: moderateScale(13), marginBottom: verticalScale(3) },
+    actFee: { fontSize: moderateScale(11), alignSelf: 'flex-start', paddingHorizontal: scale(8), paddingVertical: verticalScale(2), borderRadius: scale(8), marginBottom: verticalScale(3), overflow: 'hidden' },
+    actTransport: { fontSize: moderateScale(12) },
+    floatingButton: { position: 'absolute', bottom: verticalScale(30), alignSelf: 'center', flexDirection: 'row', paddingVertical: verticalScale(14), paddingHorizontal: scale(24), borderRadius: scale(30), elevation: 8, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.4, shadowRadius: 8 },
+    floatingButtonText: { color: '#FFF', fontSize: moderateScale(15), fontWeight: 'bold' }
 });

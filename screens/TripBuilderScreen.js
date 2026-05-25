@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../ThemeContext';
-import { AppLayout } from './theme';
+import { AppLayout, scale, verticalScale, moderateScale } from './theme';
 import { hapticManager } from '../HapticManager';
 
 const CITIES = ["Ankara", "İstanbul", "İzmir", "Antalya", "Nevşehir (Kapadokya)", "Muğla (Bodrum)"];
@@ -114,19 +114,19 @@ export default function TripBuilderScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     container: { flex: 1 },
-    content: { padding: AppLayout.largePadding, paddingBottom: 60 },
-    headerTitle: { fontSize: 32, fontWeight: 'bold', marginBottom: 30 },
-    section: { marginBottom: 32 },
-    sectionTitle: { fontSize: 18, fontWeight: '600', marginBottom: 12 },
-    pickerButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderRadius: AppLayout.cornerRadius, paddingHorizontal: 16, height: 50 },
-    pickerButtonText: { fontSize: 16, fontWeight: '500' },
-    dropdown: { borderRadius: AppLayout.cornerRadius, marginTop: 8, overflow: 'hidden' },
-    dropdownItem: { padding: 16, borderBottomWidth: 1 },
-    dropdownItemText: { fontSize: 16 },
-    valueText: { fontSize: 28, fontWeight: 'bold', textAlign: 'center', marginVertical: 16 },
-    stepperContainer: { flexDirection: 'row', justifyContent: 'center', gap: 20 },
-    stepperButton: { width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center' },
-    budgetStepper: { width: 60 },
-    createButton: { flexDirection: 'row', height: 60, borderRadius: AppLayout.largeCornerRadius, alignItems: 'center', justifyContent: 'center', marginTop: 20, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 5 },
-    createButtonText: { color: '#FFF', fontSize: 18, fontWeight: 'bold' }
+    content: { padding: AppLayout.largePadding, paddingTop: AppLayout.headerPaddingTop, paddingBottom: verticalScale(60) },
+    headerTitle: { fontSize: moderateScale(32), fontWeight: 'bold', marginBottom: verticalScale(30) },
+    section: { marginBottom: verticalScale(32) },
+    sectionTitle: { fontSize: moderateScale(18), fontWeight: '600', marginBottom: verticalScale(12) },
+    pickerButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderRadius: AppLayout.cornerRadius, paddingHorizontal: scale(16), height: verticalScale(50) },
+    pickerButtonText: { fontSize: moderateScale(16), fontWeight: '500' },
+    dropdown: { borderRadius: AppLayout.cornerRadius, marginTop: verticalScale(8), overflow: 'hidden' },
+    dropdownItem: { padding: scale(16), borderBottomWidth: 1 },
+    dropdownItemText: { fontSize: moderateScale(16) },
+    valueText: { fontSize: moderateScale(28), fontWeight: 'bold', textAlign: 'center', marginVertical: verticalScale(16) },
+    stepperContainer: { flexDirection: 'row', justifyContent: 'center', gap: scale(20) },
+    stepperButton: { width: scale(50), height: scale(50), borderRadius: scale(25), alignItems: 'center', justifyContent: 'center' },
+    budgetStepper: { width: scale(60) },
+    createButton: { flexDirection: 'row', height: verticalScale(60), borderRadius: AppLayout.largeCornerRadius, alignItems: 'center', justifyContent: 'center', marginTop: verticalScale(20), shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 5 },
+    createButtonText: { color: '#FFF', fontSize: moderateScale(18), fontWeight: 'bold' }
 });

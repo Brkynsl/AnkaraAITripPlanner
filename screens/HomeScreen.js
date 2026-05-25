@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../ThemeContext';
-import { AppLayout } from './theme';
+import { AppLayout, scale, verticalScale, moderateScale } from './theme';
 import { firebaseAuthService } from '../FirebaseAuthService';
 import { hapticManager } from '../HapticManager';
 
@@ -79,19 +79,19 @@ export default function HomeScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     container: { flex: 1 },
-    content: { paddingTop: 60, paddingHorizontal: AppLayout.largePadding, paddingBottom: 40 },
-    greeting: { fontSize: 16, fontWeight: '500' },
-    userName: { fontSize: 32, fontWeight: 'bold', marginBottom: 24 },
-    welcomeCard: { borderRadius: AppLayout.largeCornerRadius, padding: 24, marginBottom: 32, borderWidth: 1 },
-    welcomeTitle: { fontSize: 22, fontWeight: 'bold', marginBottom: 8 },
-    welcomeDesc: { fontSize: 14, lineHeight: 22, marginBottom: 20 },
+    content: { paddingTop: AppLayout.headerPaddingTop, paddingHorizontal: AppLayout.largePadding, paddingBottom: verticalScale(40) },
+    greeting: { fontSize: moderateScale(15), fontWeight: '500' },
+    userName: { fontSize: moderateScale(28), fontWeight: 'bold', marginBottom: verticalScale(20) },
+    welcomeCard: { borderRadius: AppLayout.largeCornerRadius, padding: scale(20), marginBottom: verticalScale(28), borderWidth: 1 },
+    welcomeTitle: { fontSize: moderateScale(20), fontWeight: 'bold', marginBottom: verticalScale(6) },
+    welcomeDesc: { fontSize: moderateScale(13), lineHeight: moderateScale(20), marginBottom: verticalScale(16) },
     createButton: { flexDirection: 'row', height: AppLayout.buttonHeight, borderRadius: AppLayout.cornerRadius, alignItems: 'center', justifyContent: 'center' },
-    createButtonText: { color: '#FFF', fontSize: 16, fontWeight: 'bold' },
-    sectionTitle: { fontSize: 20, fontWeight: 'bold', marginBottom: 16 },
-    featuresRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 32 },
+    createButtonText: { color: '#FFF', fontSize: moderateScale(15), fontWeight: 'bold' },
+    sectionTitle: { fontSize: moderateScale(18), fontWeight: 'bold', marginBottom: verticalScale(14) },
+    featuresRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: verticalScale(28) },
     featureItem: { alignItems: 'center', flex: 1 },
-    featureIcon: { width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center', marginBottom: 8 },
-    featureText: { fontSize: 12, fontWeight: '500' },
-    infoCard: { flexDirection: 'row', alignItems: 'center', borderRadius: AppLayout.cornerRadius, padding: 16, borderWidth: 1 },
-    infoText: { flex: 1, fontSize: 13, lineHeight: 20 },
+    featureIcon: { width: scale(46), height: scale(46), borderRadius: scale(23), alignItems: 'center', justifyContent: 'center', marginBottom: verticalScale(6) },
+    featureText: { fontSize: moderateScale(11), fontWeight: '500' },
+    infoCard: { flexDirection: 'row', alignItems: 'center', borderRadius: AppLayout.cornerRadius, padding: scale(14), borderWidth: 1 },
+    infoText: { flex: 1, fontSize: moderateScale(12), lineHeight: moderateScale(18) },
 });

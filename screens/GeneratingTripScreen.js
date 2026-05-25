@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../ThemeContext';
 import { aiTripPlannerService } from '../AITripPlannerService';
+import { AppLayout, scale, verticalScale, moderateScale } from './theme';
 
 export default function GeneratingTripScreen({ route, navigation }) {
     const { city, days, budget } = route.params;
@@ -52,8 +53,8 @@ export default function GeneratingTripScreen({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 30 },
-    iconContainer: { width: 120, height: 120, borderRadius: 60, alignItems: 'center', justifyContent: 'center', marginBottom: 40, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.6, shadowRadius: 30, elevation: 10 },
-    title: { fontSize: 22, fontWeight: 'bold', textAlign: 'center', marginBottom: 12 },
-    subtitle: { fontSize: 15, textAlign: 'center', lineHeight: 22 }
+    container: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: scale(30) },
+    iconContainer: { width: scale(120), height: scale(120), borderRadius: scale(60), alignItems: 'center', justifyContent: 'center', marginBottom: verticalScale(40), shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.6, shadowRadius: 30, elevation: 10 },
+    title: { fontSize: moderateScale(22), fontWeight: 'bold', textAlign: 'center', marginBottom: verticalScale(12) },
+    subtitle: { fontSize: moderateScale(15), textAlign: 'center', lineHeight: moderateScale(22) }
 });
