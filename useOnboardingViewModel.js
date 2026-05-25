@@ -10,25 +10,25 @@ export const OnboardingPages = [
     {
         title: "Bütçene Uygun Plan",
         description: "Toplam bütçeni gir, yapay zeka senin için en uygun tatil planını oluştursun. Ulaşım, konaklama ve aktivitelerin bütçene göre optimize edilir.",
-        iconName: "wallet.pass.fill", // React Native Vector Icons vb. ile map edilebilir
+        iconName: "wallet",
         accentColor: "#00C7BF"
     },
     {
         title: "Ulaşım + Otel + Gezi",
         description: "Uçak, otobüs veya tren seçeneklerini karşılaştır. Bütçene uygun oteller bul. Müze, park ve restoran önerileri al — hepsi tek ekranda.",
-        iconName: "airplane.departure",
+        iconName: "airplane",
         accentColor: "#FF9500"
     },
     {
         title: "Alternatif Rotalar",
         description: "Tek plan yerine 2-3 farklı alternatif sunulur: ekonomik, dengeli ve konforlu. Aynı bütçeyle farklı tatil deneyimlerini keşfet.",
-        iconName: "arrow.triangle.branch",
+        iconName: "git-branch",
         accentColor: "#AF52DE"
     },
     {
         title: "Haritada Tüm Tatilini Gör",
         description: "Otelden müzeye, restorana kadar tüm gezi noktalarını harita üzerinde gör. Mesafeleri, ulaşım seçeneklerini ve rotanı tek bakışta anla.",
-        iconName: "map.fill",
+        iconName: "map",
         accentColor: "#34C759"
     }
 ];

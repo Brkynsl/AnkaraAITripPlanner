@@ -5,7 +5,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useOnboardingViewModel } from '../useOnboardingViewModel';
 import { hapticManager } from '../HapticManager';
-import { AppColors, AppLayout } from './theme';
+import { useTheme } from '../ThemeContext';
+import { AppLayout } from './theme';
 
 const { width, height } = Dimensions.get('window');
 
@@ -13,13 +14,13 @@ export default function OnboardingScreen({ navigation }) {
     const { pages, totalPages, isLastPage, completeOnboarding } = useOnboardingViewModel();
     const [currentIndex, setCurrentIndex] = useState(0);
     const flatListRef = useRef(null);
+    const { colors } = useTheme();
 
     const handleNext = async () => {
         hapticManager.buttonTap();
         
         if (isLastPage(currentIndex)) {
             await completeOnboarding();
-            // navigation.replace('MainTab'); // Navigation kurulduğunda açılacak
             console.log("Onboarding tamamlandı, ana ekrana yönlendiriliyor...");
         } else {
             const nextIndex = currentIndex + 1;
@@ -31,7 +32,6 @@ export default function OnboardingScreen({ navigation }) {
     const handleSkip = async () => {
         hapticManager.buttonTap();
         await completeOnboarding();
-        // navigation.replace('MainTab');
         console.log("Onboarding atlandı, ana ekrana yönlendiriliyor...");
     };
 
@@ -48,24 +48,24 @@ export default function OnboardingScreen({ navigation }) {
 
     const renderItem = ({ item }) => (
         <View style={styles.pageContainer}>
-            <View style={[styles.iconContainer, { shadowColor: item.accentColor }]}>
+            <View style={[styles.iconContainer, { shadowColor: item.accentColor, backgroundColor: colors.iconBackground }]}>
                 <Ionicons name={item.iconName} size={80} color={item.accentColor} />
             </View>
-            <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.description}>{item.description}</Text>
+            <Text style={[styles.title, { color: colors.textPrimary }]}>{item.title}</Text>
+            <Text style={[styles.description, { color: colors.textSecondary }]}>{item.description}</Text>
         </View>
     );
 
     return (
         <View style={styles.container}>
             <LinearGradient
-                colors={[AppColors.gradientStart, AppColors.primary, AppColors.gradientEnd]}
+                colors={[colors.gradientStart, colors.primary, colors.gradientEnd]}
                 style={StyleSheet.absoluteFillObject}
             />
 
             {!isLastPage(currentIndex) && (
                 <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
-                    <Text style={styles.skipText}>Atla</Text>
+                    <Text style={[styles.skipText, { color: colors.textSecondary }]}>Atla</Text>
                 </TouchableOpacity>
             )}
 
@@ -89,8 +89,8 @@ export default function OnboardingScreen({ navigation }) {
                             key={index}
                             style={[
                                 styles.dot,
-                                { backgroundColor: currentIndex === index ? AppColors.secondary : 'rgba(255,255,255,0.3)' },
-                                currentIndex === index && { width: 24 } // Aktif olan daha uzun
+                                { backgroundColor: currentIndex === index ? colors.secondary : colors.textTertiary },
+                                currentIndex === index && { width: 24 }
                             ]}
                         />
                     ))}
@@ -98,7 +98,7 @@ export default function OnboardingScreen({ navigation }) {
 
                 {/* Next / Start Button */}
                 <TouchableOpacity 
-                    style={[styles.nextButton, { backgroundColor: isLastPage(currentIndex) ? AppColors.accent : AppColors.secondary }]} 
+                    style={[styles.nextButton, { backgroundColor: isLastPage(currentIndex) ? colors.accent : colors.secondary }]} 
                     onPress={handleNext}
                     activeOpacity={0.8}
                 >
@@ -125,7 +125,6 @@ const styles = StyleSheet.create({
         width: 160,
         height: 160,
         borderRadius: 80,
-        backgroundColor: 'rgba(255,255,255,0.05)',
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom: 40,
@@ -137,13 +136,11 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 28,
         fontWeight: 'bold',
-        color: AppColors.textPrimary,
         textAlign: 'center',
         marginBottom: 16,
     },
     description: {
         fontSize: 16,
-        color: AppColors.textSecondary,
         textAlign: 'center',
         lineHeight: 24,
     },
@@ -184,7 +181,6 @@ const styles = StyleSheet.create({
         padding: 8,
     },
     skipText: {
-        color: AppColors.textSecondary,
         fontSize: 15,
         fontWeight: '500',
     }

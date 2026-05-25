@@ -8,8 +8,8 @@ import { ActivityIndicator, View } from 'react-native';
 // Firebase İlklendirme (Tüm servislerden önce çağrılmalı)
 import './firebaseConfig';
 
-// Tema ve Firebase Servisi
-import { AppColors } from './screens/theme';
+// Tema
+import { ThemeProvider, useTheme } from './ThemeContext';
 import { firebaseAuthService } from './FirebaseAuthService';
 
 // Ekranlar (Auth & Onboarding)
@@ -30,7 +30,8 @@ import PreferencesScreen from './screens/PreferencesScreen';
 
 const Stack = createNativeStackNavigator();
 
-export default function App() {
+function AppNavigator() {
+  const { colors } = useTheme();
   const [isLoading, setIsLoading] = useState(true);
   const [initialRoute, setInitialRoute] = useState('Onboarding');
 
@@ -41,8 +42,6 @@ export default function App() {
   const checkInitialState = async () => {
     try {
       // 1. Firebase Auth durumunu kontrol et
-      // Not: Gerçek projede onAuthStateChanged listener'ı kullanmak daha iyidir
-      // Burada basitlik adına doğrudan servisten okuyoruz veya bekliyoruz
       const user = firebaseAuthService.currentFirebaseUser;
       
       // 2. Onboarding tamamlandı mı?
@@ -65,8 +64,8 @@ export default function App() {
 
   if (isLoading) {
     return (
-      <View style={{ flex: 1, backgroundColor: AppColors.background, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color={AppColors.secondary} />
+      <View style={{ flex: 1, backgroundColor: colors.background, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color={colors.secondary} />
       </View>
     );
   }
@@ -77,7 +76,7 @@ export default function App() {
         initialRouteName={initialRoute}
         screenOptions={{
           headerShown: false,
-          contentStyle: { backgroundColor: AppColors.background },
+          contentStyle: { backgroundColor: colors.background },
           animation: 'slide_from_right'
         }}
       >
@@ -103,5 +102,13 @@ export default function App() {
 
       </Stack.Navigator>
     </NavigationContainer>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <AppNavigator />
+    </ThemeProvider>
   );
 }

@@ -9,12 +9,14 @@ import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuthViewModel, AuthState } from '../useAuthViewModel';
 import { hapticManager } from '../HapticManager';
-import { AppColors, AppLayout } from './theme';
+import { useTheme } from '../ThemeContext';
+import { AppLayout } from './theme';
 
 export default function LoginScreen({ navigation }) {
     const { state, errorMsg, signInWithEmail } = useAuthViewModel();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { colors } = useTheme();
 
     const isLoading = state === AuthState.LOADING;
 
@@ -42,11 +44,11 @@ export default function LoginScreen({ navigation }) {
 
     return (
         <KeyboardAvoidingView 
-            style={styles.container} 
+            style={[styles.container, { backgroundColor: colors.background }]} 
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
             <LinearGradient
-                colors={[AppColors.gradientStart, AppColors.gradientEnd]}
+                colors={[colors.gradientStart, colors.gradientEnd]}
                 style={StyleSheet.absoluteFillObject}
             />
             
@@ -54,21 +56,21 @@ export default function LoginScreen({ navigation }) {
                 
                 {/* Header Alanı */}
                 <View style={styles.headerContainer}>
-                    <Ionicons name="airplane" size={64} color={AppColors.secondary} />
-                    <Text style={styles.title}>Ankara AI Trip Planner</Text>
-                    <Text style={styles.subtitle}>Akıllı Seyahat Asistanınız</Text>
+                    <Ionicons name="airplane" size={64} color={colors.secondary} />
+                    <Text style={[styles.title, { color: colors.textPrimary }]}>Ankara AI Trip Planner</Text>
+                    <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Akıllı Seyahat Asistanınız</Text>
                 </View>
 
                 {/* Form Kartı (Blur Effect) */}
-                <BlurView intensity={30} tint="dark" style={styles.formCard}>
+                <BlurView intensity={30} tint={colors.blurTint} style={[styles.formCard, { borderColor: colors.border, backgroundColor: colors.cardBackgroundRGBA }]}>
                     
                     {/* E-posta */}
-                    <View style={styles.inputContainer}>
-                        <Ionicons name="mail" size={20} color={AppColors.textSecondary} style={styles.inputIcon} />
+                    <View style={[styles.inputContainer, { backgroundColor: colors.inputBackground }]}>
+                        <Ionicons name="mail" size={20} color={colors.textSecondary} style={styles.inputIcon} />
                         <TextInput 
-                            style={styles.input}
+                            style={[styles.input, { color: colors.textPrimary }]}
                             placeholder="E-posta adresiniz"
-                            placeholderTextColor={AppColors.textTertiary}
+                            placeholderTextColor={colors.textTertiary}
                             keyboardType="email-address"
                             autoCapitalize="none"
                             value={email}
@@ -77,12 +79,12 @@ export default function LoginScreen({ navigation }) {
                     </View>
 
                     {/* Şifre */}
-                    <View style={styles.inputContainer}>
-                        <Ionicons name="lock-closed" size={20} color={AppColors.textSecondary} style={styles.inputIcon} />
+                    <View style={[styles.inputContainer, { backgroundColor: colors.inputBackground }]}>
+                        <Ionicons name="lock-closed" size={20} color={colors.textSecondary} style={styles.inputIcon} />
                         <TextInput 
-                            style={styles.input}
+                            style={[styles.input, { color: colors.textPrimary }]}
                             placeholder="Şifreniz"
-                            placeholderTextColor={AppColors.textTertiary}
+                            placeholderTextColor={colors.textTertiary}
                             secureTextEntry
                             value={password}
                             onChangeText={setPassword}
@@ -91,7 +93,7 @@ export default function LoginScreen({ navigation }) {
 
                     {/* Login Butonu */}
                     <TouchableOpacity 
-                        style={styles.loginButton} 
+                        style={[styles.loginButton, { backgroundColor: colors.accent }]} 
                         onPress={handleLogin}
                         disabled={isLoading}
                         activeOpacity={0.8}
@@ -107,16 +109,16 @@ export default function LoginScreen({ navigation }) {
                         style={styles.forgotPasswordButton}
                         onPress={() => hapticManager.buttonTap()}
                     >
-                        <Text style={styles.forgotPasswordText}>Şifremi Unuttum</Text>
+                        <Text style={[styles.forgotPasswordText, { color: colors.textSecondary }]}>Şifremi Unuttum</Text>
                     </TouchableOpacity>
                 </BlurView>
 
                 {/* Sosyal Giriş */}
                 <View style={styles.socialContainer}>
                     <View style={styles.divider}>
-                        <View style={styles.line} />
-                        <Text style={styles.dividerText}>veya</Text>
-                        <View style={styles.line} />
+                        <View style={[styles.line, { backgroundColor: colors.border }]} />
+                        <Text style={[styles.dividerText, { color: colors.textSecondary }]}>veya</Text>
+                        <View style={[styles.line, { backgroundColor: colors.border }]} />
                     </View>
 
                     <View style={styles.socialButtonsRow}>
@@ -139,8 +141,8 @@ export default function LoginScreen({ navigation }) {
                     style={styles.registerContainer}
                     onPress={() => navigation.navigate('Register')}
                 >
-                    <Text style={styles.registerText}>
-                        Hesabınız yok mu? <Text style={styles.registerHighlight}>Kayıt Ol</Text>
+                    <Text style={[styles.registerText, { color: colors.textSecondary }]}>
+                        Hesabınız yok mu? <Text style={[styles.registerHighlight, { color: colors.secondary }]}>Kayıt Ol</Text>
                     </Text>
                 </TouchableOpacity>
 
@@ -152,7 +154,6 @@ export default function LoginScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: AppColors.background,
     },
     scrollContent: {
         flexGrow: 1,
@@ -167,26 +168,21 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 32,
         fontWeight: 'bold',
-        color: AppColors.textPrimary,
         marginTop: 16,
     },
     subtitle: {
         fontSize: 16,
-        color: AppColors.textSecondary,
         marginTop: 8,
     },
     formCard: {
         borderRadius: AppLayout.largeCornerRadius,
         padding: AppLayout.largePadding,
         overflow: 'hidden',
-        backgroundColor: 'rgba(255, 255, 255, 0.05)',
         borderWidth: 1,
-        borderColor: AppColors.border,
     },
     inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
         borderRadius: AppLayout.cornerRadius,
         height: AppLayout.buttonHeight,
         marginBottom: 16,
@@ -197,11 +193,9 @@ const styles = StyleSheet.create({
     },
     input: {
         flex: 1,
-        color: AppColors.textPrimary,
         fontSize: 16,
     },
     loginButton: {
-        backgroundColor: AppColors.accent,
         height: AppLayout.buttonHeight,
         borderRadius: AppLayout.cornerRadius,
         justifyContent: 'center',
@@ -218,7 +212,6 @@ const styles = StyleSheet.create({
         marginTop: 16,
     },
     forgotPasswordText: {
-        color: AppColors.textSecondary,
         fontSize: 14,
     },
     socialContainer: {
@@ -232,10 +225,8 @@ const styles = StyleSheet.create({
     line: {
         flex: 1,
         height: 1,
-        backgroundColor: AppColors.border,
     },
     dividerText: {
-        color: AppColors.textSecondary,
         paddingHorizontal: 12,
         fontSize: 14,
     },
@@ -268,11 +259,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     registerText: {
-        color: AppColors.textSecondary,
         fontSize: 15,
     },
     registerHighlight: {
-        color: AppColors.secondary,
         fontWeight: 'bold',
     }
 });

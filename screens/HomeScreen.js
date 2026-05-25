@@ -1,17 +1,17 @@
 // HomeScreen.js
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { BlurView } from 'expo-blur';
-import { AppColors, AppLayout } from './theme';
+import { useTheme } from '../ThemeContext';
+import { AppLayout } from './theme';
 import { firebaseAuthService } from '../FirebaseAuthService';
 import { hapticManager } from '../HapticManager';
 
 export default function HomeScreen({ navigation }) {
     const [userName, setUserName] = useState('');
+    const { colors } = useTheme();
 
     useEffect(() => {
-        // Kullanıcı adını al
         const user = firebaseAuthService.currentFirebaseUser;
         if (user && user.displayName) {
             setUserName(user.displayName);
@@ -32,139 +32,66 @@ export default function HomeScreen({ navigation }) {
     };
 
     return (
-        <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-            {/* Header / Navigation Bar Benzeri */}
-            <View style={styles.header}>
-                <Text style={styles.headerTitle}>Ana Sayfa</Text>
+        <ScrollView style={[styles.container, { backgroundColor: colors.background }]} contentContainerStyle={styles.content}>
+            <Text style={[styles.greeting, { color: colors.textSecondary }]}>Merhaba,</Text>
+            <Text style={[styles.userName, { color: colors.textPrimary }]}>{userName || 'Gezgin'} 👋</Text>
+
+            {/* Welcome Card */}
+            <View style={[styles.welcomeCard, { backgroundColor: colors.isDark ? 'rgba(0, 199, 191, 0.15)' : 'rgba(0, 199, 191, 0.08)', borderColor: colors.isDark ? 'rgba(0, 199, 191, 0.3)' : 'rgba(0, 199, 191, 0.2)' }]}>
+                <Ionicons name="sparkles" size={32} color={colors.secondary} style={{ marginBottom: 12 }} />
+                <Text style={[styles.welcomeTitle, { color: colors.textPrimary }]}>AI ile Seyahat Planla</Text>
+                <Text style={[styles.welcomeDesc, { color: colors.textSecondary }]}>
+                    Bütçene, gün sayısına ve tercihlerine göre yapay zeka senin için en uygun tatil planını oluştursun.
+                </Text>
+                <TouchableOpacity 
+                    style={[styles.createButton, { backgroundColor: colors.secondary }]} 
+                    onPress={handleCreateTrip}
+                    activeOpacity={0.8}
+                >
+                    <Ionicons name="add" size={22} color="#FFF" style={{ marginRight: 8 }} />
+                    <Text style={styles.createButtonText}>Yeni Plan Oluştur</Text>
+                </TouchableOpacity>
             </View>
 
-            {/* Hoşgeldin Kartı */}
-            <BlurView intensity={20} tint="dark" style={styles.welcomeCard}>
-                <Text style={styles.welcomeLabel}>
-                    Merhaba{userName ? `, ${userName}` : ''}! 👋
-                </Text>
-                <Text style={styles.welcomeSubtitle}>
-                    Yeni bir seyahat planlamaya ne dersin?
-                </Text>
-            </BlurView>
-
-            {/* Ana Buton */}
-            <TouchableOpacity 
-                style={styles.createTripButton}
-                activeOpacity={0.8}
-                onPress={handleCreateTrip}
-            >
-                <Ionicons name="sparkles" size={24} color="#FFF" style={{ marginRight: 12 }} />
-                <View>
-                    <Text style={styles.createTripTitle}>Yeni Plan Oluştur</Text>
-                    <Text style={styles.createTripSubtitle}>AI destekli seyahat planınızı oluşturun</Text>
-                </View>
-            </TouchableOpacity>
-
-            {/* Özellikler Yatay Liste */}
-            <ScrollView 
-                horizontal 
-                showsHorizontalScrollIndicator={false} 
-                style={styles.featuresScroll}
-                contentContainerStyle={styles.featuresContent}
-            >
-                {features.map((feature, index) => (
-                    <View key={index} style={[styles.featureCard, { backgroundColor: `${feature.color}20` }]}>
-                        <Ionicons name={feature.icon} size={32} color={feature.color} style={styles.featureIcon} />
-                        <Text style={styles.featureTitle}>{feature.title}</Text>
+            {/* Feature Icons */}
+            <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>Neler Planlıyoruz?</Text>
+            <View style={styles.featuresRow}>
+                {features.map((item, index) => (
+                    <View key={index} style={styles.featureItem}>
+                        <View style={[styles.featureIcon, { backgroundColor: item.color + '15' }]}>
+                            <Ionicons name={item.icon} size={24} color={item.color} />
+                        </View>
+                        <Text style={[styles.featureText, { color: colors.textSecondary }]}>{item.title}</Text>
                     </View>
                 ))}
-            </ScrollView>
+            </View>
 
-            {/* Boş Durum İkonu */}
-            <View style={styles.emptyStateContainer}>
-                <Ionicons name="map-outline" size={120} color="rgba(255,255,255,0.1)" />
+            {/* Info Card */}
+            <View style={[styles.infoCard, { backgroundColor: colors.cardBackgroundRGBA, borderColor: colors.border }]}>
+                <Ionicons name="information-circle" size={20} color={colors.secondary} style={{ marginRight: 10 }} />
+                <Text style={[styles.infoText, { color: colors.textSecondary }]}>
+                    Şu an Ankara ve İstanbul şehirleri için gerçek veri ile plan üretiyoruz.
+                </Text>
             </View>
         </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: AppColors.background,
-    },
-    content: {
-        paddingTop: 60, // Safe Area Top Offset
-        paddingBottom: 40,
-    },
-    header: {
-        paddingHorizontal: AppLayout.largePadding,
-        marginBottom: 20,
-    },
-    headerTitle: {
-        fontSize: 34,
-        fontWeight: 'bold',
-        color: AppColors.textPrimary,
-    },
-    welcomeCard: {
-        marginHorizontal: AppLayout.defaultPadding,
-        padding: AppLayout.largePadding,
-        borderRadius: AppLayout.largeCornerRadius,
-        backgroundColor: AppColors.cardBackground,
-        borderWidth: 1,
-        borderColor: AppColors.border,
-        overflow: 'hidden',
-        marginBottom: 24,
-    },
-    welcomeLabel: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: AppColors.textPrimary,
-        marginBottom: 4,
-    },
-    welcomeSubtitle: {
-        fontSize: 15,
-        color: AppColors.textSecondary,
-    },
-    createTripButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: AppColors.secondary,
-        marginHorizontal: AppLayout.defaultPadding,
-        padding: 20,
-        borderRadius: AppLayout.largeCornerRadius,
-        marginBottom: 32,
-    },
-    createTripTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#FFF',
-    },
-    createTripSubtitle: {
-        fontSize: 13,
-        color: 'rgba(255,255,255,0.8)',
-        marginTop: 4,
-    },
-    featuresScroll: {
-        height: 120,
-    },
-    featuresContent: {
-        paddingHorizontal: AppLayout.defaultPadding,
-        gap: 12,
-    },
-    featureCard: {
-        width: 100,
-        borderRadius: AppLayout.cornerRadius,
-        padding: 12,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    featureIcon: {
-        marginBottom: 8,
-    },
-    featureTitle: {
-        fontSize: 13,
-        fontWeight: '500',
-        color: AppColors.textPrimary,
-    },
-    emptyStateContainer: {
-        alignItems: 'center',
-        marginTop: 60,
-    }
+    container: { flex: 1 },
+    content: { paddingTop: 60, paddingHorizontal: AppLayout.largePadding, paddingBottom: 40 },
+    greeting: { fontSize: 16, fontWeight: '500' },
+    userName: { fontSize: 32, fontWeight: 'bold', marginBottom: 24 },
+    welcomeCard: { borderRadius: AppLayout.largeCornerRadius, padding: 24, marginBottom: 32, borderWidth: 1 },
+    welcomeTitle: { fontSize: 22, fontWeight: 'bold', marginBottom: 8 },
+    welcomeDesc: { fontSize: 14, lineHeight: 22, marginBottom: 20 },
+    createButton: { flexDirection: 'row', height: AppLayout.buttonHeight, borderRadius: AppLayout.cornerRadius, alignItems: 'center', justifyContent: 'center' },
+    createButtonText: { color: '#FFF', fontSize: 16, fontWeight: 'bold' },
+    sectionTitle: { fontSize: 20, fontWeight: 'bold', marginBottom: 16 },
+    featuresRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 32 },
+    featureItem: { alignItems: 'center', flex: 1 },
+    featureIcon: { width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center', marginBottom: 8 },
+    featureText: { fontSize: 12, fontWeight: '500' },
+    infoCard: { flexDirection: 'row', alignItems: 'center', borderRadius: AppLayout.cornerRadius, padding: 16, borderWidth: 1 },
+    infoText: { flex: 1, fontSize: 13, lineHeight: 20 },
 });

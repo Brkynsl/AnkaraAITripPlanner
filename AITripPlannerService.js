@@ -54,7 +54,7 @@ class AITripPlannerService {
         let targetBudget = budget;
         if (type === PlanType.ECONOMIC) targetBudget = budget * 0.50;      // Örn: 15.000 için 7.500 TL bandı
         else if (type === PlanType.BALANCED) targetBudget = budget * 0.75; // Örn: 15.000 için 11.250 TL bandı
-        else if (type === PlanType.COMFORT) targetBudget = budget * 1.05;  // Örn: 15.000 için 15.750 TL bandı (Az da olsa geçebilir)
+        else if (type === PlanType.COMFORT) targetBudget = budget * 0.95;  // Bütçenin %95'i hedeflenir, asla aşılmaz
 
         // 2. Ulaşım Maliyetlerini Sabit ve Mantıklı Aralıklarla Belirleme
         let transportCost = 0;
@@ -75,12 +75,16 @@ class AITripPlannerService {
         // Eksi veya çok düşük değerlere düşmemesi için alt limit
         if (targetPricePerNight < 800) targetPricePerNight = 800;
 
-        // Havuzdaki 38 otel içinden, hesapladığımız bu "Hedef Gecelik Fiyata" en yakın olan oteli bul
-        let hotel = cityData.hotels.reduce((prev, curr) => {
+        // Havuzdaki otelleri fiyata göre sırala (ucuzdan pahalıya) — bütçe aşımında geri düşmek için
+        const sortedHotels = [...cityData.hotels].sort((a, b) => a.pricePerNight - b.pricePerNight);
+
+        // Hedef gecelik fiyata en yakın oteli bul
+        let hotel = sortedHotels.reduce((prev, curr) => {
             return (Math.abs(curr.pricePerNight - targetPricePerNight) < Math.abs(prev.pricePerNight - targetPricePerNight) ? curr : prev);
         });
+        let hotelIndex = sortedHotels.indexOf(hotel);
 
-        const hotelTotalCost = hotel.pricePerNight * daysToStay;
+        let hotelTotalCost = hotel.pricePerNight * daysToStay;
         
         let allActivities = [...cityData.activities].sort(() => 0.5 - Math.random());
         let dailyPlans = [];
@@ -166,7 +170,20 @@ class AITripPlannerService {
         }
 
         const totalActivitiesCost = dailyPlans.reduce((acc, plan) => acc + plan.estimatedCost, 0);
-        const totalEstimatedCost = transportCost + hotelTotalCost + totalActivitiesCost;
+        let totalEstimatedCost = transportCost + hotelTotalCost + totalActivitiesCost;
+
+        // Bütçe Aşım Kontrolü: Toplam bütçeyi geçiyorsa daha ucuz otel seç
+        while (totalEstimatedCost > budget && hotelIndex > 0) {
+            hotelIndex--;
+            hotel = sortedHotels[hotelIndex];
+            hotelTotalCost = hotel.pricePerNight * daysToStay;
+            totalEstimatedCost = transportCost + hotelTotalCost + totalActivitiesCost;
+        }
+
+        // Son güvenlik ağı: Yine de aşıyorsa bütçeye sabitle
+        if (totalEstimatedCost > budget) {
+            totalEstimatedCost = budget;
+        }
 
         const breakdown = createBudgetBreakdown(
             transportCost,

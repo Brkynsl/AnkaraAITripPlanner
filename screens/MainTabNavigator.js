@@ -2,10 +2,9 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import { AppColors } from './theme';
+import { useTheme } from '../ThemeContext';
 import { hapticManager } from '../HapticManager';
 
-// Ekranları import edin
 import HomeScreen from './HomeScreen';
 import MyTripsScreen from './MyTripsScreen';
 import ProfileScreen from './ProfileScreen';
@@ -13,13 +12,14 @@ import ProfileScreen from './ProfileScreen';
 const Tab = createBottomTabNavigator();
 
 export default function MainTabNavigator() {
+    const { colors } = useTheme();
+
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
                 headerShown: false,
                 tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
-
                     if (route.name === 'Home') {
                         iconName = focused ? 'home' : 'home-outline';
                     } else if (route.name === 'MyTrips') {
@@ -27,15 +27,15 @@ export default function MainTabNavigator() {
                     } else if (route.name === 'Profile') {
                         iconName = focused ? 'person' : 'person-outline';
                     }
-
                     return <Ionicons name={iconName} size={size} color={color} />;
                 },
-                tabBarActiveTintColor: AppColors.secondary, // Seçili renk (Turkuaz)
-                tabBarInactiveTintColor: 'rgba(255,255,255,0.4)', // Seçili olmayan renk
+                tabBarActiveTintColor: colors.secondary,
+                tabBarInactiveTintColor: colors.tabBarInactive,
                 tabBarStyle: {
-                    backgroundColor: AppColors.cardBackground, // Şeffaf/Blur tarzı arka plan
-                    borderTopWidth: 0,
-                    elevation: 0, // Android shadow kapat
+                    backgroundColor: colors.isDark ? colors.cardBackground : '#FFFFFF',
+                    borderTopWidth: colors.isDark ? 0 : 0.5,
+                    borderTopColor: colors.border,
+                    elevation: 0,
                     height: 85,
                     paddingBottom: 25,
                     paddingTop: 10,
@@ -47,7 +47,7 @@ export default function MainTabNavigator() {
             })}
             screenListeners={{
                 tabPress: () => {
-                    hapticManager.selection(); // Tab değişimlerinde hafif titreşim
+                    hapticManager.selection();
                 },
             }}
         >
