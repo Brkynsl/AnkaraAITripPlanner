@@ -185,12 +185,25 @@ class AITripPlannerService {
                     candidatePool = [...cityData.activities];
                 }
 
+                // Öğle ve Akşam yemeği aralara serpiştiriliyor (Asla arka arkaya gelmeyecek)
+                let isMealTime = false;
+                if (activitiesPerDay === 4) {
+                    isMealTime = (j === 1 || j === 3); // 2. ve 4. sıra yemek (Örn: Aktivite -> Yemek -> Aktivite -> Yemek)
+                } else if (activitiesPerDay === 3) {
+                    isMealTime = (j === 1); // 2. sıra yemek (Örn: Aktivite -> Yemek -> Aktivite)
+                }
+
                 // ─── A* ile en iyi adayı seç ───
                 let bestIndex = -1;
                 let bestFScore = Infinity;
 
                 for (let k = 0; k < candidatePool.length; k++) {
                     const candidate = candidatePool[k];
+
+                    // Kategori zorlaması (Yemek saatinde sadece restoran, diğer saatlerde sadece aktivite)
+                    if (isMealTime && candidate.category !== "Yemek") continue;
+                    if (!isMealTime && candidate.category === "Yemek") continue;
+
                     const candidateCost = (candidate.estimatedCost || 0) + (candidate.entryFee || 0);
                     const candidateDist = calculateDistance(
                         currentLocation.lat, currentLocation.lon,
