@@ -95,6 +95,21 @@ export default function TripDetailScreen({ route, navigation }) {
                     </View>
                 ))}
 
+                {/* 5. Bütçe Dağılımı */}
+                <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>💰 Bütçe Dağılımı</Text>
+                <View style={[styles.card, { backgroundColor: colors.cardBackgroundRGBA }]}>
+                    <Text style={[styles.cardText, { color: colors.textSecondary }]}>
+                        ✈️ Ulaşım: {formatPrice(plan.budgetBreakdown?.transportation || 0)}{'\n'}
+                        🏨 Konaklama: {formatPrice(plan.budgetBreakdown?.accommodation || 0)}{'\n'}
+                        🍔 Yeme İçme: {formatPrice(plan.budgetBreakdown?.food || 0)}{'\n'}
+                        🚇 Şehir İçi Ulaşım: {formatPrice(plan.budgetBreakdown?.localTransport || 0)}{'\n'}
+                        🎉 Eğlence & Aktiviteler: {formatPrice(plan.budgetBreakdown?.activities || 0)}{'\n'}
+                        🛍️ Diğer/Alışveriş: {formatPrice(plan.budgetBreakdown?.miscellaneous || 0)}{'\n'}
+                        ──────────────{'\n'}
+                        <Text style={{fontWeight: 'bold'}}>Toplam: {formatPrice(plan.budgetBreakdown?.total || plan.totalEstimatedCost)}</Text>
+                    </Text>
+                </View>
+
             </ScrollView>
 
             {/* Harita Butonu (Floating) */}

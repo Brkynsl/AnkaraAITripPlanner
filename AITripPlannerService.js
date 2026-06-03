@@ -146,6 +146,9 @@ class AITripPlannerService {
         let hotelIndex = sortedHotels.indexOf(hotel);
         let hotelTotalCost = hotel.pricePerNight * daysToStay;
         
+        // Hotel objesine toplam fiyatı ekle
+        hotel = { ...hotel, totalPrice: hotelTotalCost };
+        
         // ─── A* Heuristik Rota Optimizasyonu ───
         const { wCost, wDist } = getAStarWeights(type);
 
@@ -297,20 +300,21 @@ class AITripPlannerService {
                     // Kalite skoru normalizasyonu (yüksek = daha iyi yer)
                     const qualityNorm = normalizeMinMax(activityQualityScore(candidate), minQuality, maxQuality);
 
-                    // f(n) = wCost * g_norm + wDist * (dist_norm + h_norm) - qualityBonus * quality_norm - priorityBonus
-                    const fScore = computeAStarScore(gCostNorm, distNorm, hNorm, qualityNorm, wCost, wDist) - priorityBonus;
+                    // f(n)'e çok ufak bir rastgelelik (noise) ekliyoruz ki her plan tamamen aynı olmasın,
+                    // ama bu rastgelelik (0.01-0.05) mesafeyi bozup zig-zag yaptıracak kadar büyük değil.
+                    const randomNoise = Math.random() * 0.05;
+                    const fScore = computeAStarScore(gCostNorm, distNorm, hNorm, qualityNorm, wCost, wDist) - priorityBonus + randomNoise;
 
-                    // Top-3 listesine ekle (en düşük fScore = en iyi)
+                    // Top listesine ekle (en düşük fScore = en iyi)
                     topCandidates.push({ index: k, fScore });
                     topCandidates.sort((a, b) => a.fScore - b.fScore);
                     if (topCandidates.length > 3) topCandidates.pop();
                 }
 
-                // Top-3 adaydan rastgele birini seç (her tıklamada farklı rota!)
+                // Zig-zag hatasını önlemek için rastgelelik yerine HER ZAMAN en iyi (en düşük fScore) adayı seç
                 let bestIndex = -1;
                 if (topCandidates.length > 0) {
-                    const picked = topCandidates[Math.floor(Math.random() * topCandidates.length)];
-                    bestIndex = picked.index;
+                    bestIndex = topCandidates[0].index;
                 }
 
                 // Hiç aday bulunamadıysa (isMealTime filtresi yüzünden olabilir), filtre olmadan en yakını seç
@@ -398,7 +402,9 @@ class AITripPlannerService {
         }
 
         const totalActivitiesCost = dailyPlans.reduce((acc, plan) => acc + plan.estimatedCost, 0);
-        const actualCost = transportCost + hotelTotalCost + totalActivitiesCost;
+        const returnTransportCost = transportCost * 0.95;
+        const totalTransportCost = transportCost + returnTransportCost;
+        const actualCost = totalTransportCost + hotelTotalCost + totalActivitiesCost;
 
         // ─── Bütçe Sabitleme ───
         // Toplam maliyet HER ZAMAN hedef bütçeye eşit olacak.
@@ -411,9 +417,9 @@ class AITripPlannerService {
             let tempCost = actualCost;
             while (tempCost > targetBudget && hotelIndex > 0) {
                 hotelIndex--;
-                hotel = sortedHotels[hotelIndex];
-                hotelTotalCost = hotel.pricePerNight * daysToStay;
-                tempCost = transportCost + hotelTotalCost + totalActivitiesCost;
+                hotel = { ...sortedHotels[hotelIndex], totalPrice: sortedHotels[hotelIndex].pricePerNight * daysToStay };
+                hotelTotalCost = hotel.totalPrice;
+                tempCost = totalTransportCost + hotelTotalCost + totalActivitiesCost;
             }
             totalEstimatedCost = Math.max(tempCost, targetBudget);
         }
@@ -425,12 +431,16 @@ class AITripPlannerService {
         const activitySpending = totalActivitiesCost * 0.45 + remainingBudget * 0.25;   // Aktivite harcama
         const otherBudget = totalActivitiesCost * 0.1 + remainingBudget * 0.10;         // Diğer
 
+        const localTransportCost = dailyPlans.reduce((acc, plan) => {
+            return acc + plan.activities.reduce((a, act) => a + (act.transportCost || 0), 0);
+        }, 0);
+
         const breakdown = createBudgetBreakdown(
-            transportCost,
+            totalTransportCost,
             hotelTotalCost,
             Math.floor(foodBudget),
-            Math.floor(entertainmentBudget),
-            Math.floor(activitySpending),
+            Math.floor(localTransportCost),
+            Math.floor(entertainmentBudget + activitySpending),
             Math.floor(otherBudget)
         );
 
@@ -447,7 +457,7 @@ class AITripPlannerService {
                 arrivalTime: transportType === TransportType.FLIGHT ? "09:45" : "12:00",
                 duration: transportType === TransportType.FLIGHT ? "1s 15dk" : "4s 30dk",
                 price: transportCost,
-                returnPrice: transportCost * 0.95,
+                returnPrice: returnTransportCost,
                 classType: type === PlanType.COMFORT ? "Business" : "Standart"
             },
             hotel, dailyPlans, budgetBreakdown: breakdown, totalEstimatedCost, recommendation, fitScore
