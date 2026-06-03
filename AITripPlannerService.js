@@ -92,9 +92,9 @@ class AITripPlannerService {
         // 1. Hedef Bütçe Ölçeklendirmesi — Kullanıcının bütçesine YAKIN planlar üret
         // 11.000 TL isteyen kullanıcıya 8.000 TL plan vermek yerine bütçeyi gerçekçi kullan
         let targetBudget = budget;
-        if (type === PlanType.ECONOMIC) targetBudget = budget * 0.75;      // Örn: 11.000 için ~8.250 TL bandı
-        else if (type === PlanType.BALANCED) targetBudget = budget * 0.90; // Örn: 11.000 için ~9.900 TL bandı
-        else if (type === PlanType.COMFORT) targetBudget = budget * 0.98;  // Bütçenin ~%98'i hedeflenir
+        if (type === PlanType.ECONOMIC) targetBudget = budget * 0.65;      // Bütçenin %65'i (Örn 10.000 -> 6.500)
+        else if (type === PlanType.BALANCED) targetBudget = budget * 0.88; // Bütçenin %88'i (Örn 10.000 -> 8.800)
+        else if (type === PlanType.COMFORT) targetBudget = budget * 1.08;  // Bütçenin %108'i (Örn 10.000 -> 10.800)
 
         // 2. Ulaşım Maliyetlerini Sabit ve Mantıklı Aralıklarla Belirleme
         let transportCost = 0;
@@ -116,15 +116,27 @@ class AITripPlannerService {
         // Eksi veya çok düşük değerlere düşmemesi için alt limit
         if (targetPricePerNight < 500) targetPricePerNight = 500;
 
-        // Havuzdaki otelleri fiyata göre sırala (ucuzdan pahalıya) — bütçe aşımında geri düşmek için
+        // Havuzdaki otelleri fiyata göre sırala (ucuzdan pahalıya)
         const sortedHotels = [...cityData.hotels].sort((a, b) => a.pricePerNight - b.pricePerNight);
 
-        // Hedef gecelik fiyata en yakın oteli bul
-        let hotel = sortedHotels.reduce((prev, curr) => {
+        // ─── Katmanlı Otel Havuzu ───
+        // 3 planın aynı oteli seçmesini engellemek için oteller 3 fiyat dilimine bölünüyor.
+        // Eko: en ucuz %33, Dengeli: ortanca %33, Premium: en pahalı %33
+        const oneThird = Math.max(1, Math.floor(sortedHotels.length / 3));
+        let tierHotels;
+        if (type === PlanType.ECONOMIC) {
+            tierHotels = sortedHotels.slice(0, oneThird);
+        } else if (type === PlanType.BALANCED) {
+            tierHotels = sortedHotels.slice(oneThird, oneThird * 2);
+        } else {
+            tierHotels = sortedHotels.slice(oneThird * 2);
+        }
+
+        // Kendi katmanı içinde hedef gecelik fiyata en yakın oteli bul
+        let hotel = tierHotels.reduce((prev, curr) => {
             return (Math.abs(curr.pricePerNight - targetPricePerNight) < Math.abs(prev.pricePerNight - targetPricePerNight) ? curr : prev);
         });
         let hotelIndex = sortedHotels.indexOf(hotel);
-
         let hotelTotalCost = hotel.pricePerNight * daysToStay;
         
         // ─── A* Heuristik Rota Optimizasyonu ───
@@ -175,34 +187,75 @@ class AITripPlannerService {
         const activityBudgetLimit = targetBudget - transportCost - hotelTotalCost;
 
         for (let i = 1; i <= days; i++) {
-            const activitiesPerDay = Math.min(i === 1 ? 3 : 4, candidatePool.length);
+            // Premium plan bütçeyi doldurmak için daha fazla yer gezer (günde 5-6 yer)
+            let activitiesPerDay;
+            if (type === PlanType.COMFORT) {
+                activitiesPerDay = Math.min(i === 1 ? 5 : 6, candidatePool.length);
+            } else {
+                activitiesPerDay = Math.min(i === 1 ? 3 : 4, candidatePool.length);
+            }
             if (activitiesPerDay === 0) break;
 
             let dayActivities = [];
+            let shoppingCountToday = 0; // Günde en fazla 1 AVM/Alışveriş yeri
+            let mosqueCountToday = 0;   // Günde en fazla 1 cami/türbe
+            let mealCountToday = 0;     // Günde en fazla 1 restoran
             for (let j = 0; j < activitiesPerDay; j++) {
                 // Eğer aday havuzu boşaldıysa tekrar doldur
                 if (candidatePool.length === 0) {
                     candidatePool = [...cityData.activities];
                 }
 
-                // Öğle ve Akşam yemeği aralara serpiştiriliyor (Asla arka arkaya gelmeyecek)
+                // Günde sadece 1 yemek molası (2. sırada = öğle yemeği)
                 let isMealTime = false;
-                if (activitiesPerDay === 4) {
-                    isMealTime = (j === 1 || j === 3); // 2. ve 4. sıra yemek (Örn: Aktivite -> Yemek -> Aktivite -> Yemek)
-                } else if (activitiesPerDay === 3) {
-                    isMealTime = (j === 1); // 2. sıra yemek (Örn: Aktivite -> Yemek -> Aktivite)
+                if (mealCountToday === 0) {
+                    if (activitiesPerDay >= 5) {
+                        isMealTime = (j === 2); // 3. sıra: Aktivite -> Aktivite -> Yemek -> Aktivite -> ...
+                    } else if (activitiesPerDay === 4) {
+                        isMealTime = (j === 2); // 3. sıra
+                    } else if (activitiesPerDay === 3) {
+                        isMealTime = (j === 1); // 2. sıra
+                    }
                 }
 
-                // ─── A* ile en iyi adayı seç ───
-                let bestIndex = -1;
-                let bestFScore = Infinity;
+                // ─── A* ile Top-K Rastgele Seçim ───
+                // En iyi 3 adayı bul, aralarından rastgele birini seç → her seferinde farklı rota!
+                let topCandidates = []; // { index, fScore } dizisi
 
                 for (let k = 0; k < candidatePool.length; k++) {
                     const candidate = candidatePool[k];
 
-                    // Kategori zorlaması (Yemek saatinde sadece restoran, diğer saatlerde sadece aktivite)
+                    // Kategori zorlaması: Yemek saatinde sadece restoran
                     if (isMealTime && candidate.category !== "Yemek") continue;
                     if (!isMealTime && candidate.category === "Yemek") continue;
+
+                    // ─── Yemek Katmanlaması ───
+                    // Eko: Sadece ucuz lokantalar (≤500 TL)
+                    // Dengeli: Orta segment restoranlar (≤750 TL)
+                    // Premium: Tüm restoranlar dahil lüks (sınırsız)
+                    if (isMealTime && candidate.category === "Yemek") {
+                        const mealCost = (candidate.estimatedCost || 0) + (candidate.entryFee || 0);
+                        if (type === PlanType.ECONOMIC && mealCost > 500) continue;
+                        if (type === PlanType.BALANCED && mealCost > 750) continue;
+                    }
+
+                    const isShopping = candidate.category === "Alışveriş ve Eğlence";
+                    const nameLower = candidate.name.toLowerCase();
+                    const isMosque = nameLower.includes('cami') || nameLower.includes('türbe');
+
+                    if (!isMealTime) {
+                        // Günde en fazla 1 AVM
+                        if (isShopping && shoppingCountToday >= 1) continue;
+                        // Günde en fazla 1 Cami
+                        if (isMosque && mosqueCountToday >= 1) continue;
+                        // AVM ve Cami aynı gün olmasın (birbiriyle uyumsuz konseptler)
+                        if ((isShopping && mosqueCountToday >= 1) || (isMosque && shoppingCountToday >= 1)) continue;
+                    }
+
+                    // Tarihi ve Kültürel / Doğa yerlerine öncelik bonusu
+                    let priorityBonus = 0;
+                    if (candidate.category === "Tarihi ve Kültürel") priorityBonus = 0.15;
+                    else if (candidate.category === "Doğa ve Parklar") priorityBonus = 0.10;
 
                     const candidateCost = (candidate.estimatedCost || 0) + (candidate.entryFee || 0);
                     const candidateDist = calculateDistance(
@@ -224,31 +277,39 @@ class AITripPlannerService {
                     // Kalite skoru normalizasyonu (yüksek = daha iyi yer)
                     const qualityNorm = normalizeMinMax(activityQualityScore(candidate), minQuality, maxQuality);
 
-                    // f(n) = wCost * g_norm + wDist * (dist_norm + h_norm) - qualityBonus * quality_norm
-                    const fScore = computeAStarScore(gCostNorm, distNorm, hNorm, qualityNorm, wCost, wDist);
+                    // f(n) = wCost * g_norm + wDist * (dist_norm + h_norm) - qualityBonus * quality_norm - priorityBonus
+                    const fScore = computeAStarScore(gCostNorm, distNorm, hNorm, qualityNorm, wCost, wDist) - priorityBonus;
 
-                    // Bütçe aşımı kontrolü: bu aktiviteyi eklersek bütçeyi aşar mı?
-                    if (cumulativeBudgetSpent + candidateCost > activityBudgetLimit && activityBudgetLimit > 0) {
-                        continue; // Bütçeyi aşacak adayları atla
-                    }
-
-                    if (fScore < bestFScore) {
-                        bestFScore = fScore;
-                        bestIndex = k;
-                    }
+                    // Top-3 listesine ekle (en düşük fScore = en iyi)
+                    topCandidates.push({ index: k, fScore });
+                    topCandidates.sort((a, b) => a.fScore - b.fScore);
+                    if (topCandidates.length > 3) topCandidates.pop();
                 }
 
-                // Eğer bütçe kısıtı yüzünden hiç aday bulunamadıysa, en ucuz olanı seç
+                // Top-3 adaydan rastgele birini seç (her tıklamada farklı rota!)
+                let bestIndex = -1;
+                if (topCandidates.length > 0) {
+                    const picked = topCandidates[Math.floor(Math.random() * topCandidates.length)];
+                    bestIndex = picked.index;
+                }
+
+                // Hiç aday bulunamadıysa (isMealTime filtresi yüzünden olabilir), filtre olmadan en yakını seç
                 if (bestIndex === -1) {
-                    candidatePool.sort((a, b) => 
-                        ((a.estimatedCost || 0) + (a.entryFee || 0)) - 
-                        ((b.estimatedCost || 0) + (b.entryFee || 0))
-                    );
-                    bestIndex = 0;
+                    let fallbackBest = Infinity;
+                    for (let k = 0; k < candidatePool.length; k++) {
+                        const d = calculateDistance(currentLocation.lat, currentLocation.lon, candidatePool[k].latitude, candidatePool[k].longitude);
+                        if (d < fallbackBest) { fallbackBest = d; bestIndex = k; }
+                    }
                 }
 
                 let activity = candidatePool.splice(bestIndex, 1)[0];
                 if (!activity) break;
+
+                // Sayaçları güncelle
+                if (activity.category === "Alışveriş ve Eğlence") shoppingCountToday++;
+                if (activity.category === "Yemek") mealCountToday++;
+                const actNameLower = activity.name.toLowerCase();
+                if (actNameLower.includes('cami') || actNameLower.includes('türbe')) mosqueCountToday++;
 
                 const actCost = (activity.estimatedCost || 0) + (activity.entryFee || 0);
                 cumulativeBudgetSpent += actCost;
@@ -314,17 +375,27 @@ class AITripPlannerService {
         const totalActivitiesCost = dailyPlans.reduce((acc, plan) => acc + plan.estimatedCost, 0);
         let totalEstimatedCost = transportCost + hotelTotalCost + totalActivitiesCost;
 
-        // Bütçe Aşım Kontrolü: Toplam bütçeyi geçiyorsa daha ucuz otel seç
-        while (totalEstimatedCost > budget && hotelIndex > 0) {
+        // ─── Bütçe Bandı Kontrolü ───
+        // Her plan tipi için kesin üst limitler:
+        //   Eko:      max %70  (10.000 -> max 7.000)
+        //   Dengeli:  max %85  (10.000 -> max 8.500)
+        //   Premium:  max %110 (10.000 -> max 11.000)
+        let maxAllowed;
+        if (type === PlanType.ECONOMIC) maxAllowed = budget * 0.70;
+        else if (type === PlanType.BALANCED) maxAllowed = budget * 0.92;
+        else maxAllowed = budget * 1.10;
+
+        // Bütçeyi aşıyorsa oteli ucuzlatarak sığdır
+        while (totalEstimatedCost > maxAllowed && hotelIndex > 0) {
             hotelIndex--;
             hotel = sortedHotels[hotelIndex];
             hotelTotalCost = hotel.pricePerNight * daysToStay;
             totalEstimatedCost = transportCost + hotelTotalCost + totalActivitiesCost;
         }
 
-        // Son güvenlik ağı: Yine de aşıyorsa bütçeye sabitle
-        if (totalEstimatedCost > budget) {
-            totalEstimatedCost = budget;
+        // Hala aşıyorsa (en ucuz otel bile yetmiyorsa) tavana sabitle
+        if (totalEstimatedCost > maxAllowed) {
+            totalEstimatedCost = maxAllowed;
         }
 
         const breakdown = createBudgetBreakdown(
