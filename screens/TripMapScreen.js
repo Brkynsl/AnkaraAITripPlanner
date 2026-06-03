@@ -131,19 +131,19 @@ export default function TripMapScreen({ route, navigation }) {
             <View style={styles.segmentContainer}>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.segmentScroll}>
                     <TouchableOpacity 
-                        style={[styles.segmentButton, { backgroundColor: colors.cardBackground }, selectedDayIndex === -1 && { backgroundColor: colors.isDark ? colors.primary : '#1C1C1E' }]}
+                        style={[styles.segmentButton, { backgroundColor: colors.cardBackground }, selectedDayIndex === -1 && { backgroundColor: colors.isDark ? '#FFFFFF' : '#1C1C1E' }]}
                         onPress={() => { hapticManager.lightImpact(); setSelectedDayIndex(-1); }}
                     >
-                        <Text style={[styles.segmentText, { color: colors.textPrimary }, selectedDayIndex === -1 && styles.segmentTextActive]}>Tümü</Text>
+                        <Text style={[styles.segmentText, { color: colors.textPrimary }, selectedDayIndex === -1 && { color: colors.isDark ? '#000000' : '#FFFFFF' }]}>Tümü</Text>
                     </TouchableOpacity>
                     
                     {plan.dailyPlans.map((day, idx) => (
                         <TouchableOpacity 
                             key={`seg-${idx}`}
-                            style={[styles.segmentButton, { backgroundColor: colors.cardBackground }, selectedDayIndex === idx && { backgroundColor: colors.isDark ? colors.primary : '#1C1C1E' }]}
+                            style={[styles.segmentButton, { backgroundColor: colors.cardBackground }, selectedDayIndex === idx && { backgroundColor: colors.isDark ? '#FFFFFF' : '#1C1C1E' }]}
                             onPress={() => { hapticManager.lightImpact(); setSelectedDayIndex(idx); }}
                         >
-                            <Text style={[styles.segmentText, { color: colors.textPrimary }, selectedDayIndex === idx && styles.segmentTextActive]}>Gün {day.dayNumber}</Text>
+                            <Text style={[styles.segmentText, { color: colors.textPrimary }, selectedDayIndex === idx && { color: colors.isDark ? '#000000' : '#FFFFFF' }]}>Gün {day.dayNumber}</Text>
                         </TouchableOpacity>
                     ))}
                 </ScrollView>
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
     segmentScroll: { alignItems: 'center' },
     segmentButton: { paddingHorizontal: scale(16), paddingVertical: verticalScale(8), borderRadius: scale(20), marginRight: scale(8), shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 4, elevation: 4 },
     segmentText: { fontWeight: '600', fontSize: moderateScale(14) },
-    segmentTextActive: { color: '#FFF' },
+    // segmentTextActive artık dinamik verildiği için kullanılmıyor
     customPin: { width: scale(30), height: scale(30), borderRadius: scale(15), justifyContent: 'center', alignItems: 'center', borderWidth: 2, borderColor: '#FFF', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.3, shadowRadius: 3, elevation: 4 },
     customPinText: { color: '#FFF', fontSize: moderateScale(14), fontWeight: 'bold' }
 });

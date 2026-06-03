@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ActivityIndicator, View } from 'react-native';
 
 // Firebase İlklendirme (Tüm servislerden önce çağrılmalı)
@@ -12,8 +11,7 @@ import './firebaseConfig';
 import { ThemeProvider, useTheme } from './ThemeContext';
 import { firebaseAuthService } from './FirebaseAuthService';
 
-// Ekranlar (Auth & Onboarding)
-import OnboardingScreen from './screens/OnboardingScreen';
+// Ekranlar (Auth)
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 
@@ -33,7 +31,7 @@ const Stack = createNativeStackNavigator();
 function AppNavigator() {
   const { colors } = useTheme();
   const [isLoading, setIsLoading] = useState(true);
-  const [initialRoute, setInitialRoute] = useState('Onboarding');
+  const [initialRoute, setInitialRoute] = useState('Login');
 
   useEffect(() => {
     checkInitialState();
@@ -41,22 +39,17 @@ function AppNavigator() {
 
   const checkInitialState = async () => {
     try {
-      // 1. Firebase Auth durumunu kontrol et
+      // Firebase Auth durumunu kontrol et
       const user = firebaseAuthService.currentFirebaseUser;
-      
-      // 2. Onboarding tamamlandı mı?
-      const hasCompletedOnboarding = await AsyncStorage.getItem('hasCompletedOnboarding');
-      
+
       if (user) {
         setInitialRoute('MainTab');
-      } else if (hasCompletedOnboarding === 'true') {
-        setInitialRoute('Login');
       } else {
-        setInitialRoute('Onboarding');
+        setInitialRoute('Login');
       }
     } catch (error) {
       console.error("Başlangıç durumu kontrol edilemedi", error);
-      setInitialRoute('Onboarding');
+      setInitialRoute('Login');
     } finally {
       setIsLoading(false);
     }
@@ -72,7 +65,7 @@ function AppNavigator() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator 
+      <Stack.Navigator
         initialRouteName={initialRoute}
         screenOptions={{
           headerShown: false,
@@ -80,23 +73,22 @@ function AppNavigator() {
           animation: 'slide_from_right'
         }}
       >
-        {/* Onboarding & Auth */}
-        <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+        {/* Auth */}
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} options={{ presentation: 'modal' }} />
 
         {/* Main Application */}
         <Stack.Screen name="MainTab" component={MainTabNavigator} />
-        
+
         {/* Trip Flow */}
         <Stack.Screen name="TripBuilder" component={TripBuilderScreen} />
         <Stack.Screen name="GeneratingTrip" component={GeneratingTripScreen} options={{ animation: 'fade' }} />
         <Stack.Screen name="TripAlternatives" component={TripAlternativesScreen} options={{ presentation: 'fullScreenModal' }} />
-        
+
         {/* Details & Map */}
         <Stack.Screen name="TripDetail" component={TripDetailScreen} />
         <Stack.Screen name="TripMap" component={TripMapScreen} options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
-        
+
         {/* Profile Settings */}
         <Stack.Screen name="Preferences" component={PreferencesScreen} />
 

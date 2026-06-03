@@ -1,6 +1,7 @@
 // TripAlternativesScreen.js
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, Alert, Modal, TextInput } from 'react-native';
+import { CommonActions } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../ThemeContext';
 import { AppLayout, scale, verticalScale, moderateScale } from './theme';
@@ -39,7 +40,24 @@ export default function TripAlternativesScreen({ route, navigation }) {
             await firestoreService.saveTrip(newTrip);
             setIsSaving(false);
             Alert.alert("Başarılı", "Seyahatiniz başarıyla kaydedildi!", [
-                { text: "Tamam", onPress: () => navigation.navigate('MainTab', { screen: 'MyTrips' }) }
+                { 
+                    text: "Tamam", 
+                    onPress: () => {
+                        navigation.dispatch(
+                            CommonActions.reset({
+                                index: 0,
+                                routes: [
+                                    { 
+                                        name: 'MainTab',
+                                        state: {
+                                            routes: [{ name: 'MyTrips' }],
+                                        },
+                                    },
+                                ],
+                            })
+                        );
+                    }
+                }
             ]);
         } catch (error) {
             setIsSaving(false);

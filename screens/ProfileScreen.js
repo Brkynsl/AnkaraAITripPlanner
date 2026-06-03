@@ -6,7 +6,6 @@ import { useTheme } from '../ThemeContext';
 import { AppLayout, scale, verticalScale, moderateScale } from './theme';
 import { firebaseAuthService } from '../FirebaseAuthService';
 import { hapticManager } from '../HapticManager';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ProfileScreen({ navigation }) {
     const [user, setUser] = useState(null);
@@ -29,7 +28,6 @@ export default function ProfileScreen({ navigation }) {
                     onPress: async () => {
                         try {
                             await firebaseAuthService.signOut();
-                            await AsyncStorage.setItem('hasCompletedOnboarding', 'false');
                             console.log("Logged out successfully");
                         } catch (error) {
                             Alert.alert("Hata", error.message);
